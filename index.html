@@ -776,15 +776,15 @@ const FILES = {
        url:'https://docs.google.com/spreadsheets/d/12SvYaRop5AkkFXBA2RyRmy4wKlcvFDsiM7PFyb5PCT8/edit',
        d:'الملف المشترك: الأوردرات والستوك من غير أسعار شراء ولا فلوس. الفريق (زي كريم) بيسجل فيه.',
        gids:{orders:0, stock:100},
-       tabs:[{k:'orders', t:'الأوردرات', range:"'الأوردرات'!A1:R5000"},
-             {k:'stock',  t:'الستوك',    range:"'الستوك'!A1:N5000"}]},
+       tabs:[{k:'orders', t:'الأوردرات', range:"'الأوردرات'!A1:R20000"},
+             {k:'stock',  t:'الستوك',    range:"'الستوك'!A1:N20000"}]},
   acc:{key:'acc', id:'1OUaCd6dOTcisKgnFf0slvKtANtrKEKlwxU5ju9eXsCA', title:'ALSaad October | الحسابات',
        url:'https://docs.google.com/spreadsheets/d/1OUaCd6dOTcisKgnFf0slvKtANtrKEKlwxU5ju9eXsCA/edit',
        d:'ملف خاص: أسعار الشراء والربح والخزنة. بيتقري بس لليوزر اللي معاه صلاحية الفلوس أو سعر الشرا.',
        need:u=>u.cost || u.sections.includes('money'), lockMsg:'الملف ده بيتقري بس لليوزر اللي معاه صلاحية الفلوس أو سعر الشرا.',
        gids:{prices:0, tx:1398649563},
-       tabs:[{k:'prices', t:'أسعار الأجهزة', range:"'أسعار الأجهزة'!A1:H5000"},
-             {k:'tx',     t:'الخزنة',        range:"'الخزنة'!A1:I5000"}]},
+       tabs:[{k:'prices', t:'أسعار الأجهزة', range:"'أسعار الأجهزة'!A1:H20000"},
+             {k:'tx',     t:'الخزنة',        range:"'الخزنة'!A1:I20000"}]},
   pay:{key:'pay', id:'159KAuOCk02CwzGMQUD4Z2lILcftpyvL1y6LnXWcQ7ZQ', title:'ALSaad October | المرتبات',
        url:'https://docs.google.com/spreadsheets/d/159KAuOCk02CwzGMQUD4Z2lILcftpyvL1y6LnXWcQ7ZQ/edit',
        d:'ملف خاص: الموظفين والخصومات والبونص.', need:u=>u.sections.includes('payroll'), lockMsg:'الملف ده بيتقري بس لليوزر اللي معاه صلاحية المرتبات.',
@@ -1077,6 +1077,13 @@ function alerts(){
     add('red','flag','أوردرات من شهور قبل كده فلوسها لسه متراجعتش', old, 'orders', ()=>{ S.month = monthOf(old[0].created); applyMonth(); S.orderFilter = {q:'', status:'all', day:null, review:true}; }); }
   if(me().cost && SYNC.parts.prices && SYNC.parts.prices.ok) add('amber','box','أجهزة في الستوك لسه ملهاش سعر شراء في ملف الحسابات', devices.filter(d=>d.noPrice), 'stock');
   if(can('money')) add('amber','info','حركة خزنة على سيريال مش في الأوردرات', tx.filter(t=>t.sn && !(S.all||S.data).orders.some(o=>o.sn===t.sn)), 'money');
+  // sheet capacity: formulas run to row 20,000. Warn admins from 80% so there is time to archive.
+  if(S.all && (can('users') || can('connections'))){
+    const CAP = 19999, parts = [['الأوردرات', S.all.orders.length], ['الستوك', S.all.devices.length], ['الخزنة', (S.all.tx||[]).length]];
+    const full = parts.filter(([,n]) => n >= CAP*0.8);
+    if(full.length) out.push({level: full.some(([,n]) => n >= CAP*0.95) ? 'red' : 'amber', icon:'alert',
+      t:`الشيت قرّب يتملي: ${full.map(([t,n]) => `${t} ${Math.round(n/CAP*100)}%`).join('، ')}. كلّم محمد عشان الأرشيف السنوي.`, n:'', list:[], go:'connections'});
+  }
   return out;
 }
 
