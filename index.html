@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALSaad October | نظام إدارة الشغل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9ECF0; --surface:#FFFFFF; --surface-2:#F4F6F8; --border:#DCE0E6; --border-2:#E8EBEF;
+  --text:#141821; --text-2:#2F3644; --muted:#646E80; --faint:#97A0AF;
+  --primary:#1C4FD6; --primary-2:#1239A6; --primary-soft:#E5ECFD; --primary-ink:#1845C7;
+  --green:#0E8F6E; --green-soft:#DDF5EC; --amber:#B4610A; --amber-soft:#FFF0DC;
+  --red:#C72E35; --red-soft:#FCE9EA; --violet:#7A3BD8; --violet-soft:#F1E9FF; --sky:#0A72A8; --sky-soft:#E1F1FA;
+  --side:#161A21; --side-2:#1F242D; --side-text:#A3ABB9; --ink:#161A21;
+  --shadow:0 1px 0 rgba(20,24,33,.04),0 8px 24px -12px rgba(20,24,33,.12);
+  --shadow-lg:0 30px 60px -20px rgba(15,18,24,.35);
+  --r:18px; --r-sm:10px;
+  --display:'Alexandria','IBM Plex Sans Arabic',sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#0E1116; --surface:#161A21; --surface-2:#1B2028; --border:#272D37; --border-2:#20252E;
+  --text:#ECEFF4; --text-2:#C8CEDA; --muted:#8C95A6; --faint:#5F6878;
+  --primary:#5C8DFF; --primary-2:#1C4FD6; --primary-soft:#132245; --primary-ink:#A3BEFF;
+  --green:#3DD6A3; --green-soft:#0F2B23; --amber:#F5B54A; --amber-soft:#2E2412;
+  --red:#F2777C; --red-soft:#341A1C; --violet:#B38CFF; --violet-soft:#271D3F; --sky:#5CC3F2; --sky-soft:#10283A;
+  --side:#0B0D11; --side-2:#161A21;
+  --shadow:0 1px 0 rgba(255,255,255,.02),0 10px 30px -14px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body.theming *{transition:background-color .35s,border-color .35s,color .35s!important}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;letter-spacing:-.2px}
+.num{font-family:var(--display);font-variant-numeric:tabular-nums}
+.mono{font-family:var(--display);font-weight:500;letter-spacing:.6px;font-size:12.5px;direction:ltr;unicode-bidi:isolate}
+svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:8px}
+kbd{font-family:var(--display);font-size:11px;padding:1px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted)}
+
+/* ---------- Login ---------- */
+.login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;background:var(--surface)}
+.login-art{--mx:70%;--my:30%;background:radial-gradient(520px circle at var(--mx) var(--my),#1C4FD640,transparent 60%),var(--ink);color:#fff;padding:52px 56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.login-art::after{content:"";position:absolute;inset:0;background-image:radial-gradient(#ffffff14 1px,transparent 1px);background-size:22px 22px;pointer-events:none;mask-image:radial-gradient(600px circle at var(--mx) var(--my),#000,transparent 75%)}
+.login-art > *{position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:13px;background:var(--primary);display:grid;place-items:center;font-family:'Sora',sans-serif;font-weight:800;font-size:22px;letter-spacing:-1px;color:#fff;box-shadow:0 0 0 6px #1C4FD626}
+.wordmark{display:block;font-family:'Sora',sans-serif;font-size:19px;font-weight:300;letter-spacing:-.4px;line-height:1.2;text-align:right}
+.wordmark b{font-weight:700;letter-spacing:-.6px}
+.brand small{color:#8E97A8;font-size:12px;display:block;margin-top:2px}
+.login-art h1{font-size:46px;line-height:1.2;font-weight:700;max-width:540px}
+.login-art p.lead{color:#B4BBC8;font-size:16px;max-width:460px;margin-top:14px}
+.journey{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:0;max-width:600px;counter-reset:j}
+.journey li{position:relative;padding-top:52px;padding-inline-end:12px;font-size:13px;color:#C9CFDA}
+.journey li::before{counter-increment:j;content:counter(j);position:absolute;top:0;inset-inline-start:0;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:600;background:#ffffff10;border:1px solid #ffffff2a;color:#fff}
+.journey li::after{content:"";position:absolute;top:18px;inset-inline-start:44px;inset-inline-end:8px;height:1px;background:linear-gradient(90deg,#ffffff40,#ffffff10)}
+.journey li:last-child::after{display:none}
+.journey li:last-child::before{background:var(--primary);border-color:var(--primary)}
+.journey b{display:block;color:#fff;font-family:var(--display);font-weight:600;font-size:14px;margin-bottom:2px}
+.login-form{display:flex;align-items:center;justify-content:center;padding:40px}
+.login-card{width:100%;max-width:400px}
+.login-card h2{font-size:28px}
+.login-card .sub{color:var(--muted);margin:6px 0 28px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:600;font-size:13px;margin-bottom:6px;color:var(--text-2)}
+.input{width:100%;height:46px;border:1px solid var(--border);border-radius:12px;padding:0 14px;background:var(--surface-2);transition:border-color .15s,box-shadow .15s,background .15s}
+.input:focus{outline:0;border-color:var(--primary);background:var(--surface);box-shadow:0 0 0 4px var(--primary-soft)}
+.err{color:var(--red);font-size:13px;min-height:20px;margin-bottom:6px}
+.btn{height:42px;padding:0 18px;border-radius:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .15s,transform .1s,border-color .15s;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-2)}
+.btn-ghost{background:var(--surface);border:1px solid var(--border);color:var(--text-2)}
+.btn-ghost:hover{border-color:var(--text-2)}
+.btn-sm{height:34px;padding:0 12px;border-radius:10px;font-size:13px}
+.btn-block{width:100%;height:48px;font-size:15px}
+.demo{margin-top:26px;border-top:1px solid var(--border-2);padding-top:18px}
+.demo p{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.demo-grid button{border:1px solid var(--border);border-radius:12px;padding:10px;text-align:start;display:flex;gap:10px;align-items:center;transition:border-color .15s,background .15s;background:var(--surface)}
+.demo-grid button:hover{border-color:var(--primary);background:var(--primary-soft)}
+.demo-grid b{display:block;font-size:13px}
+.demo-grid small{color:var(--muted);font-size:11.5px}
+
+/* ---------- Shell ---------- */
+.shell{display:flex;min-height:100vh}
+.side{width:248px;background:var(--side);color:var(--side-text);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex-shrink:0;z-index:40;transition:transform .25s}
+.side .brand{padding:22px 20px 20px}
+.side .wordmark{color:#fff;font-size:18px}
+.nav{padding:4px 12px;flex:1;overflow:auto}
+.nav-label{font-size:12px;color:#646D7D;padding:16px 12px 6px;font-weight:500}
+.nav a{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:11px;color:var(--side-text);text-decoration:none;font-weight:500;margin-bottom:2px;transition:background .15s,color .15s}
+.nav a:hover{background:#ffffff0b;color:#fff}
+.nav a.active{background:#fff;color:var(--ink)}
+.nav a.active svg{color:var(--primary)}
+.nav a .count{margin-inline-start:auto;background:#ffffff14;color:#fff;font-family:var(--display);font-size:11px;padding:0 8px;border-radius:20px;line-height:20px}
+.nav a.active .count{background:var(--primary-soft);color:var(--primary-ink)}
+.nav a .count.warn{background:#F5A524;color:#2a1a00}
+.side-foot{padding:14px;border-top:1px solid #ffffff0d}
+.me{display:flex;align-items:center;gap:10px;padding:8px;border-radius:12px}
+.avatar{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-family:var(--display);font-weight:600;color:#fff;flex-shrink:0}
+.me b{color:#fff;font-size:14px;display:block}
+.uname{font-family:'Sora',sans-serif;font-weight:600;letter-spacing:-.2px;unicode-bidi:isolate;direction:ltr}
+.av-ini{font-family:'Sora',sans-serif;font-weight:700;font-size:13px;letter-spacing:-.3px}
+.greet{color:#9AA3B2;font-size:14px}
+.ops h2.hello{font-size:34px;line-height:1.15;margin-top:2px}
+.ops h2.hello .uname{font-weight:700;letter-spacing:-.8px}
+.me small{font-size:11.5px}
+.me button{margin-inline-start:auto;color:var(--side-text);padding:7px;border-radius:9px}
+.me button:hover{background:#ffffff14;color:#fff}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{height:70px;display:flex;align-items:center;gap:14px;padding:0 28px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(12px);position:sticky;top:0;z-index:30}
+.top h1{font-size:19px}
+.top .crumb{color:var(--muted);font-size:12.5px}
+.cmd-trigger{margin-inline-start:auto;display:flex;align-items:center;gap:10px;height:40px;min-width:280px;padding:0 12px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--faint);transition:border-color .15s}
+.cmd-trigger:hover{border-color:var(--primary);color:var(--muted)}
+.cmd-trigger span{flex:1;text-align:start;font-size:13px}
+.top-actions{display:flex;align-items:center;gap:8px}
+.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--text-2);background:var(--surface);border:1px solid var(--border);position:relative;transition:border-color .15s,color .15s}
+.icon-btn:hover{border-color:var(--primary);color:var(--primary)}
+.icon-btn .dot{position:absolute;top:8px;inset-inline-end:9px;width:8px;height:8px;border-radius:50%;background:#EF4444;border:2px solid var(--surface)}
+.sync{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:12px;background:var(--amber-soft);color:var(--amber);font-weight:600;font-size:12.5px}
+.sync i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.menu-btn{display:none}
+.content{padding:8px 28px 56px;max-width:1440px;width:100%}
+
+/* ---------- Building blocks ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow)}
+.card-h{display:flex;align-items:center;gap:10px;padding:18px 20px 0}
+.card-h h3{font-size:15.5px}
+.card-h .hint{color:var(--muted);font-size:12.5px}
+.card-h .right{margin-inline-start:auto;display:flex;gap:8px;align-items:center}
+.card-b{padding:16px 20px 20px}
+.grid{display:grid;gap:16px}
+.g-kpi{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.g-2-1{grid-template-columns:2fr 1fr}
+.g-1-1{grid-template-columns:1fr 1fr}
+.mt{margin-top:16px}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:12px 0 20px;flex-wrap:wrap}
+.hero h2{font-size:26px}
+.hero p{color:var(--muted);max-width:70ch}
+
+/* ops band — the signature element */
+.ops{background:var(--ink);color:#fff;border-radius:22px;padding:26px 28px;display:grid;grid-template-columns:minmax(220px,.8fr) 2.2fr;gap:28px;align-items:center;position:relative;overflow:hidden;margin-top:12px}
+.ops::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 220px at 15% 120%,#1C4FD655,transparent 70%);pointer-events:none}
+.ops > *{position:relative}
+[data-theme="dark"] .ops,[data-theme="dark"] .balance{background:#1A1F28;border:1px solid var(--border)}
+[data-theme="dark"] .nav a.active{background:var(--primary);color:#fff}[data-theme="dark"] .nav a.active svg{color:#fff}
+.ops h2{font-size:24px;font-weight:600}
+.ops .date{color:#9AA3B2;font-size:13px;margin-top:2px}
+.start-note{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:5px 10px;border-radius:9px;background:#F5A52422;color:#F5C26B;font-size:12.5px}
+.start-note svg{width:14px;height:14px}
+.clock{font-family:var(--display);font-size:44px;font-weight:300;letter-spacing:1px;margin-top:14px;direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
+.clock small{font-size:18px;color:#7C8596;margin-inline-start:4px}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);position:relative}
+.flow-line{position:absolute;top:27px;inset-inline:12.5%;height:2px;background:#ffffff1c;border-radius:2px;overflow:hidden}
+.flow-line i{position:absolute;inset:0;background:linear-gradient(270deg,#5C8DFF,#3DD6A3);transform-origin:right;transform:scaleX(var(--p,1));transition:transform 1.4s cubic-bezier(.6,0,.2,1)}
+.stage{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:0 6px;border-radius:16px;cursor:pointer;color:inherit;padding-bottom:6px;transition:background .2s}
+.stage:hover{background:#ffffff0a}
+.stage .node{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#20252E;border:2px solid #ffffff22;font-family:var(--display);font-weight:600;font-size:18px;position:relative;transition:border-color .2s,transform .2s}
+.stage:hover .node{border-color:#fff;transform:translateY(-2px)}
+.stage.hot .node{border-color:#F5A524;box-shadow:0 0 0 6px #F5A52422}
+.stage.done .node{background:#3DD6A3;border-color:#3DD6A3;color:#0B2A20}
+.stage .node svg{width:22px;height:22px}
+.stage .cnt{font-family:var(--display);font-size:34px;font-weight:600;line-height:1.1;margin-top:6px}
+.stage .lbl{font-size:13px;color:#D3D8E1}
+.stage .who{font-size:11.5px;color:#7C8596}
+
+/* KPI strip */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));overflow:hidden}
+.kpi{padding:18px 20px;position:relative;text-align:start;border-inline-start:1px solid var(--border-2);transition:background .15s;display:block;width:100%}
+.kpis .kpi:first-child{border-inline-start:0}
+button.kpi:hover{background:var(--surface-2)}
+.kpi .k-label{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px}
+.kpi .k-label svg{width:16px;height:16px}
+.kpi .k-val{font-family:var(--display);font-size:27px;font-weight:600;margin-top:6px;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.kpi .k-val small{font-size:13px;color:var(--muted);font-weight:400;margin-inline-start:4px;font-family:'IBM Plex Sans Arabic'}
+.kpi .k-foot{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:4px;align-items:center}
+.kpi .k-foot svg{width:13px;height:13px}
+.kpi .spark{position:absolute;bottom:0;inset-inline:0;height:34px;opacity:.55;pointer-events:none}
+.trend-up{color:var(--green);font-weight:600}
+.trend-down{color:var(--red);font-weight:600}
+.tone-blue{background:var(--primary-soft);color:var(--primary)}
+.tone-green{background:var(--green-soft);color:var(--green)}
+.tone-amber{background:var(--amber-soft);color:var(--amber)}
+.tone-violet{background:var(--violet-soft);color:var(--violet)}
+.tone-red{background:var(--red-soft);color:var(--red)}
+.tone-sky{background:var(--sky-soft);color:var(--sky)}
+.c-blue{color:var(--primary)}.c-green{color:var(--green)}.c-amber{color:var(--amber)}.c-violet{color:var(--violet)}.c-red{color:var(--red)}.c-sky{color:var(--sky)}
+
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.chip.plain::before{display:none}
+.s-confirmed{background:var(--primary-soft);color:var(--primary-ink)}
+.s-shipping{background:var(--amber-soft);color:var(--amber)}
+.s-delivered{background:var(--green-soft);color:var(--green)}
+.s-returned{background:var(--violet-soft);color:var(--violet)}
+.s-cancelled{background:var(--red-soft);color:var(--red)}
+.s-available{background:var(--green-soft);color:var(--green)}
+.s-reserved{background:var(--primary-soft);color:var(--primary-ink)}
+.s-sold{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:separate;border-spacing:0}
+th{font-size:12px;color:var(--muted);font-weight:600;text-align:start;padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:1}
+td{padding:12px 14px;border-bottom:1px solid var(--border-2);white-space:nowrap;vertical-align:middle}
+tbody tr{transition:background .12s}
+tbody tr.clickable{cursor:pointer}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:0}
+.cell-main{font-weight:600}
+.cell-sub{color:var(--muted);font-size:12px}
+.empty{padding:48px 20px;text-align:center;color:var(--muted)}
+.empty svg{width:40px;height:40px;color:var(--faint);margin-bottom:8px}
+
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border-2)}
+.search{position:relative;flex:1;min-width:220px}
+.search svg{position:absolute;inset-inline-start:12px;top:50%;transform:translateY(-50%);color:var(--faint)}
+.search input{width:100%;height:40px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);padding-inline:38px 12px}
+.search input:focus{outline:0;border-color:var(--primary);background:var(--surface)}
+.select{height:40px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);padding:0 12px;min-width:140px}
+.tabs{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:3px;gap:2px;flex-wrap:wrap}
+.tabs button{height:32px;padding:0 12px;border-radius:9px;font-weight:600;font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:center;transition:background .15s,color .15s}
+.tabs button:hover{color:var(--text)}
+.tabs button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(20,24,33,.12)}
+.tabs button span{font-family:var(--display);font-size:11px;background:var(--border-2);padding:0 6px;border-radius:10px;color:var(--muted)}
+.filter-chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 6px 0 12px;border-radius:10px;background:var(--primary-soft);color:var(--primary-ink);font-weight:600;font-size:12.5px}
+.filter-chip button{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;color:inherit}
+.filter-chip button:hover{background:#ffffff80}
+.filter-chip svg{width:14px;height:14px}
+
+/* charts */
+.chart-box{position:relative}
+.chart{width:100%;height:250px;direction:ltr;display:block}
+.chart .bar{cursor:pointer;transition:opacity .15s}
+.chart:hover .bar{opacity:.45}
+.chart .bar:hover{opacity:1}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;padding:8px 12px;border-radius:10px;font-size:12.5px;white-space:nowrap;transform:translate(-50%,calc(-100% - 10px));opacity:0;transition:opacity .12s;z-index:5;box-shadow:var(--shadow-lg)}
+.tip b{font-family:var(--display);font-size:15px;display:block}
+.tip.show{opacity:1}
+.legend{display:flex;flex-direction:column;gap:4px}
+.legend button{display:flex;align-items:center;gap:10px;font-size:13px;padding:6px 8px;border-radius:9px;text-align:start;transition:background .15s}
+.legend button:hover{background:var(--surface-2)}
+.legend i{width:10px;height:10px;border-radius:3px}
+.legend b{margin-inline-start:auto;font-family:var(--display)}
+.donut-wrap{display:flex;align-items:center;gap:20px}
+.donut circle.seg{cursor:pointer;transition:stroke-width .15s}
+.donut circle.seg:hover{stroke-width:26}
+
+/* feed */
+.feed{display:flex;flex-direction:column}
+.feed-item{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--border-2)}
+.feed-item:last-child{border-bottom:0}
+.feed-ic{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.feed-ic svg{width:15px;height:15px}
+.feed-item p{font-size:13px;color:var(--text-2)}
+.feed-item small{color:var(--faint);font-size:11.5px}
+
+/* recon */
+.recon{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.recon div{padding:16px;border-inline-end:1px solid var(--border);position:relative;background:var(--surface)}
+.recon div:last-child{border-inline-end:0;background:var(--primary-soft)}
+.recon small{color:var(--muted);font-size:12px;display:block}
+.recon b{font-family:var(--display);font-size:26px;font-weight:600;display:block;margin-top:2px}
+.recon .op{position:absolute;inset-inline-end:-11px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--muted);z-index:2}
+.result{display:flex;align-items:center;gap:14px;padding:16px;border-radius:14px;margin-top:14px;flex-wrap:wrap}
+.result .big{font-family:var(--display);font-size:22px;font-weight:600}
+.check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border);display:grid;place-items:center;transition:background .12s,border-color .12s;background:var(--surface)}
+.check.on{background:var(--green);border-color:var(--green);color:#fff}
+.check svg{width:13px;height:13px;stroke-width:3}
+.progress{height:8px;background:#ffffff90;border-radius:8px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--green);border-radius:8px;transition:width .35s}
+
+/* treasury */
+.balance{background:var(--ink);color:#fff;border:0;padding:26px;position:relative;overflow:hidden}
+.balance::before{content:"";position:absolute;inset:0;background:radial-gradient(400px 200px at 100% 0%,#3DD6A333,transparent 70%);pointer-events:none}
+.balance small{color:#9AA3B2}
+.balance .amt{font-family:var(--display);font-size:40px;font-weight:600;margin:4px 0 16px;letter-spacing:-.5px;position:relative}
+.balance .row{display:flex;gap:28px;flex-wrap:wrap;position:relative}
+.balance .row div small{display:block;font-size:12px}
+.balance .row div b{font-family:var(--display);font-size:16px;font-weight:500}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bars .b-row{display:grid;grid-template-columns:130px 1fr 90px;gap:10px;align-items:center;font-size:13px}
+.bars .b-track{height:10px;background:var(--border-2);border-radius:10px;overflow:hidden}
+.bars .b-track i{display:block;height:100%;border-radius:10px}
+.amt-in{color:var(--green);font-weight:600;font-family:var(--display)}
+.amt-out{color:var(--red);font-weight:600;font-family:var(--display)}
+
+/* report */
+.tg{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:22px;min-height:420px;background-image:radial-gradient(var(--border) 1px,transparent 1px);background-size:18px 18px}
+.tg-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.tg-head .avatar{background:var(--primary)}
+.tg-head b{display:block;font-size:14px}
+.tg-head small{color:var(--muted);font-size:12px}
+.bubble{background:var(--surface);border:1px solid var(--border);border-radius:16px;border-top-right-radius:4px;padding:16px 18px;white-space:pre-wrap;font-size:13.5px;line-height:1.9;box-shadow:var(--shadow);max-width:560px}
+.bubble .time{display:block;text-align:end;color:var(--faint);font-size:11px;margin-top:6px}
+
+/* drawer / panel */
+.overlay{position:fixed;inset:0;background:rgba(14,17,22,.45);backdrop-filter:blur(3px);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(460px,100%);background:var(--surface);z-index:70;box-shadow:var(--shadow-lg);transform:translateX(-105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.drawer.show{transform:none}
+.drawer-h{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.drawer-h h3{font-size:17px}
+.drawer-h .icon-btn{margin-inline-start:auto}
+.drawer-b{padding:20px 22px;overflow:auto;flex:1}
+.drawer-f{padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:120px 1fr;gap:10px 12px;font-size:13.5px}
+.kv dt{color:var(--muted)}
+.kv dd{font-weight:600}
+.sec-title{font-family:var(--display);font-size:13px;color:var(--text-2);font-weight:600;margin:24px 0 12px}
+.timeline{position:relative;padding-inline-start:24px}
+.timeline::before{content:"";position:absolute;inset-inline-start:7px;top:6px;bottom:14px;width:2px;background:var(--border)}
+.tl{position:relative;padding-bottom:16px}
+.tl::before{content:"";position:absolute;inset-inline-start:-22px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:3px solid var(--primary)}
+.tl.done::before{border-color:var(--green);background:var(--green)}
+.tl.pending::before{border-color:var(--border)}
+.tl.pending b{color:var(--faint)}
+.tl b{font-size:13px;display:block}
+
+.notif{padding:14px 22px;border-bottom:1px solid var(--border-2);display:flex;gap:12px}
+.notif.unread{background:var(--primary-soft)}
+.notif p{font-size:13px}
+.notif small{color:var(--muted);font-size:11.5px}
+
+.toast-box{position:fixed;bottom:22px;inset-inline-start:50%;transform:translateX(50%);z-index:100;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;box-shadow:var(--shadow-lg);display:flex;gap:10px;align-items:center;font-size:13.5px;animation:tin .25s ease}
+.toast svg{color:#3DD6A3}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* command palette */
+.cmd{position:fixed;inset:0;z-index:90;display:none;align-items:flex-start;justify-content:center;padding:12vh 16px 16px;background:rgba(14,17,22,.5);backdrop-filter:blur(4px)}
+.cmd.show{display:flex}
+.cmd-box{width:min(620px,100%);background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-lg);overflow:hidden;animation:pop .18s ease}
+@keyframes pop{from{opacity:0;transform:scale(.98) translateY(-6px)}to{opacity:1;transform:none}}
+.cmd-in{display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid var(--border)}
+.cmd-in svg{color:var(--faint)}
+.cmd-in input{flex:1;height:58px;border:0;background:none;font-size:16px;outline:0}
+.cmd-list{max-height:52vh;overflow:auto;padding:8px}
+.cmd-group{font-size:12px;color:var(--faint);padding:10px 12px 4px;font-weight:600}
+.cmd-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;cursor:pointer;width:100%;text-align:start}
+.cmd-item .ci{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);flex-shrink:0}
+.cmd-item b{display:block;font-size:13.5px;font-weight:600}
+.cmd-item small{color:var(--muted);font-size:12px}
+.cmd-item .end{margin-inline-start:auto}
+.cmd-item.on{background:var(--primary-soft)}
+.cmd-item.on .ci{background:var(--primary);color:#fff}
+.cmd-foot{display:flex;gap:16px;padding:10px 18px;border-top:1px solid var(--border-2);font-size:12px;color:var(--faint)}
+
+/* permissions & connections */
+.perm td{text-align:center}
+.perm td:first-child,.perm th:first-child{text-align:start}
+.yes{color:var(--green)}
+.no{color:var(--faint)}
+.conn{padding:20px}
+.conn-top{display:flex;gap:12px;align-items:center}
+.conn-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#E5F5EA;color:#188038}
+[data-theme="dark"] .conn-ic{background:#10301E;color:#4ADE80}
+.conn h4{font-size:15px}
+.conn .cols{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.conn .cols span{font-size:12px;background:var(--surface-2);border:1px solid var(--border);padding:3px 10px;border-radius:8px;color:var(--text-2)}
+.note{display:flex;gap:12px;padding:14px 16px;border-radius:14px;background:var(--primary-soft);color:var(--primary-ink);font-size:13.5px;align-items:flex-start}
+.note.warn{background:var(--amber-soft);color:var(--amber)}
+.muted{color:var(--muted)}
+.row-flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* sheet table */
+.sheet{font-size:13px}
+.sheet th{background:var(--surface-2);border-inline-start:1px solid var(--border-2);padding:11px 12px}
+.sheet td{border-inline-start:1px solid var(--border-2);padding:11px 12px}
+.sheet th:first-child,.sheet td:first-child{border-inline-start:0}
+.sheet tbody tr:nth-child(even){background:color-mix(in srgb,var(--surface-2) 55%,transparent)}
+.sheet tbody tr:hover{background:var(--primary-soft)}
+.sheet .rn{color:var(--faint);text-align:center;width:44px;font-size:12px}
+.sheet .sn{color:var(--primary-ink);font-weight:600}
+
+/* entrance (one orchestrated moment on first dashboard load) */
+.intro .ops,.intro .kpis,.intro .g-2-1{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.intro .kpis{animation-delay:.12s}
+.intro .g-2-1{animation-delay:.22s}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---------- AI assistant ---------- */
+.ai-only{display:none!important}
+body.ai-on .ai-only{display:grid!important}
+.fab{position:fixed;bottom:24px;inset-inline-end:24px;z-index:55;height:52px;padding:0 20px 0 16px;border-radius:26px;background:var(--primary);color:#fff;font-weight:600;display:none;align-items:center;gap:10px;box-shadow:0 14px 30px -8px #1C4FD699;transition:transform .2s,background .2s}
+.fab:hover{transform:translateY(-2px);background:var(--primary-2)}
+.fab svg{width:20px;height:20px}
+body.ai-on.logged .fab{display:flex}
+body.ai-open .fab{display:none!important}
+.ai{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(440px,100%);background:var(--surface);z-index:75;box-shadow:var(--shadow-lg);transform:translateX(-105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;border-inline-start:1px solid var(--border)}
+.ai.show{transform:none}
+.ai-h{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.ai-h .avatar{background:var(--primary)}
+.ai-h b{display:block;font-size:15px}
+.ai-h small{color:var(--muted);font-size:12px}
+.ai-h .acts{margin-inline-start:auto;display:flex;gap:6px}
+.ai-h .icon-btn{width:36px;height:36px}
+.ai-b{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:88%;padding:11px 14px;border-radius:16px;font-size:13.5px;line-height:1.8;word-wrap:break-word}
+.msg.user{align-self:flex-start;background:var(--primary);color:#fff;border-top-right-radius:4px}
+.msg.assistant{align-self:flex-end;background:var(--surface-2);border:1px solid var(--border);border-top-left-radius:4px}
+.msg.assistant b{color:var(--text)}
+.msg ul{padding-inline-start:18px;margin:4px 0}
+.msg .thinking{color:var(--muted);display:flex;gap:8px;align-items:center}
+.msg .thinking i{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:blink 1s infinite}
+.msg .thinking i:nth-child(2){animation-delay:.2s}.msg .thinking i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
+.msg.err{background:var(--red-soft);color:var(--red);border-color:transparent}
+.ai-welcome{text-align:center;padding:18px 8px 6px}
+.ai-welcome .big{width:56px;height:56px;border-radius:16px;margin:0 auto 12px;display:grid;place-items:center;background:var(--primary);color:#fff;box-shadow:0 0 0 8px var(--primary-soft)}
+.ai-welcome .big svg{width:26px;height:26px}
+.ai-welcome h4{font-size:16px}
+.ai-welcome p{color:var(--muted);font-size:13px;margin-top:4px}
+.sugs{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.sugs button{text-align:start;border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--text-2);transition:.15s;display:flex;gap:8px;align-items:center}
+.sugs button:hover{border-color:var(--primary);background:var(--primary-soft);color:var(--primary-ink)}
+.sugs svg{width:15px;height:15px;color:var(--primary)}
+.ai-f{padding:14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end}
+.ai-f textarea{flex:1;resize:none;min-height:46px;max-height:140px;border:1px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--surface-2);font:inherit;line-height:1.5}
+.ai-f textarea:focus{outline:0;border-color:var(--primary);background:var(--surface);box-shadow:0 0 0 4px var(--primary-soft)}
+.ai-f .btn{height:46px;width:46px;padding:0;border-radius:14px}
+.ai-note{font-size:11px;color:var(--faint);text-align:center;padding:0 14px 10px}
+
+
+/* ---------- review mark, alerts, money ---------- */
+.rvc{width:30px;padding-inline:8px 0!important;text-align:center}
+.rv{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px var(--red-soft);vertical-align:middle}
+.rv.ok{width:18px;height:18px;background:var(--green-soft);box-shadow:none;display:inline-grid;place-items:center;color:var(--green)}
+.rv.ok svg{width:12px;height:12px;stroke-width:3}
+.tabs .rv{width:8px;height:8px;box-shadow:none}
+.sheet tbody tr.unrev td:first-child{box-shadow:inset -3px 0 0 var(--red)}
+.nav a .count.red{background:#E5484D;color:#fff}
+.kpi-alert .k-val{color:var(--red)}
+.g-1-2{grid-template-columns:1fr 2fr}
+.alerts{display:flex;flex-direction:column;gap:8px}
+.al{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);text-align:start;transition:border-color .15s,background .15s;width:100%}
+.al:hover{border-color:var(--text-2)}
+.al-ic{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;flex-shrink:0}
+.al-red .al-ic{background:var(--red-soft);color:var(--red)}
+.al-amber .al-ic{background:var(--amber-soft);color:var(--amber)}
+.al-t{flex:1;font-size:13.5px;font-weight:500}
+.al b{font-family:var(--display);font-size:17px}
+.al-red b{color:var(--red)}
+.al > svg:last-child{width:16px;height:16px;color:var(--faint)}
+.reps{display:flex;flex-direction:column;gap:14px}
+.rep{display:flex;gap:12px;align-items:flex-start}
+.rep-n{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--surface-2);font-size:12px;color:var(--muted);flex-shrink:0}
+.rep:first-child .rep-n{background:var(--primary);color:#fff}
+.rep-b{flex:1}
+.rep-h{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px}
+.rep-h span{font-family:var(--display);font-weight:600}
+.rep .b-track{height:6px;background:var(--border-2);border-radius:6px;overflow:hidden}
+.rep .b-track i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.rep small{color:var(--muted);font-size:12px}
+.ledger{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.ledger div{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border-2);font-size:13.5px}
+.ledger div:last-child{border-bottom:0}
+.ledger small{color:var(--muted)}
+.ledger .tot{background:var(--surface-2);font-weight:600}
+.ledger b{font-family:var(--display);font-weight:600}
+.mini-tx{display:flex;flex-direction:column;gap:6px}
+.mini-tx div{display:flex;justify-content:space-between;font-size:13px;padding:8px 12px;border-radius:10px;background:var(--surface-2)}
+.mini-tx small{color:var(--muted)}
+.accs{display:grid;grid-template-columns:repeat(4,1fr) 1.2fr;gap:12px}
+.accs-2{grid-template-columns:1fr 1fr;margin-top:12px}
+.acc{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;text-align:start;display:flex;flex-direction:column;gap:4px;transition:border-color .15s;box-shadow:var(--shadow)}
+button.acc:hover,.acc.on{border-color:var(--primary)}
+.acc.on{box-shadow:0 0 0 3px var(--primary-soft)}
+.acc-ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);color:var(--text-2);margin-bottom:6px}
+.acc-l{font-size:13px;color:var(--muted)}
+.acc b{font-family:var(--display);font-size:24px;font-weight:600}
+.acc small{color:var(--muted);font-size:12px}
+.acc-total{background:var(--ink);color:#fff;border-color:var(--ink);justify-content:flex-end}
+.acc-total .acc-l,.acc-total small{color:#9AA3B2}
+.acc-soft{flex-direction:column}
+.flow-help{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.flow-help[hidden]{display:none}
+.fh-step{background:var(--primary-soft);border-radius:14px;padding:14px 16px}
+.fh-step b{font-family:var(--display);font-size:14px;color:var(--primary-ink)}
+.fh-step p{font-size:13px;color:var(--text-2);margin-top:4px}
+.secs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sec{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:12px;background:var(--surface-2)}
+.sec-ic{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:var(--surface);color:var(--primary);flex-shrink:0}
+.sec b{font-size:13.5px;display:block}
+.sec small{color:var(--muted);font-size:12px}
+.qs,.rules{padding-inline-start:20px;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+.rules li::marker,.qs li::marker{font-family:var(--display);color:var(--primary);font-weight:600}
+.perm td,.perm th{text-align:center}
+.perm td:first-child,.perm th:first-child,.perm td:nth-child(2),.perm th:nth-child(2){text-align:start}
+
+
+/* ---------- opening splash ---------- */
+.splash{position:fixed;inset:0;z-index:200;background:radial-gradient(700px 400px at 50% 60%,#1C4FD633,transparent 70%),#161A21;color:#fff;display:grid;place-items:center;cursor:pointer;transition:opacity .6s ease,transform .6s ease}
+.splash.sp-out{opacity:0;transform:scale(1.03);pointer-events:none}
+.sp-inner{display:flex;flex-direction:column;align-items:center;gap:22px;padding:24px;text-align:center}
+.sp-logo{width:64px;height:64px;font-size:32px;border-radius:18px;animation:spIn .6s cubic-bezier(.2,.8,.2,1) both}
+.sp-line{font-family:var(--display);font-size:clamp(26px,4.4vw,48px);font-weight:600;min-height:1.5em;letter-spacing:-.3px}
+.sp-caret{display:inline-block;width:3px;height:.9em;background:#5C8DFF;margin-inline-start:6px;vertical-align:-.1em;border-radius:2px;animation:blink2 .9s steps(1) infinite}
+.sp-done .sp-caret{opacity:0;animation:none}
+.sp-brand{font-family:'Sora',sans-serif;font-size:16px;font-weight:300;color:#8E97A8;opacity:0;transform:translateY(6px);transition:opacity .5s,transform .5s}
+.sp-brand b{font-weight:700;color:#fff}
+.sp-done .sp-brand{opacity:1;transform:none}
+.sp-skip{position:absolute;bottom:28px;font-size:12px;color:#5F6878}
+@keyframes spIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+@keyframes blink2{50%{opacity:0}}
+
+@media (max-width:1180px){.ops{grid-template-columns:1fr}.clock{text-align:start;direction:rtl}}
+@media (max-width:1100px){.g-2-1,.g-1-1,.g-1-2{grid-template-columns:1fr}.accs{grid-template-columns:repeat(2,1fr)}.flow-help{grid-template-columns:1fr 1fr}.recon{grid-template-columns:repeat(2,1fr)}.recon .op{display:none}.recon div{border-bottom:1px solid var(--border)}.cmd-trigger{min-width:0}.cmd-trigger span,.cmd-trigger kbd{display:none}}
+@media (max-width:900px){
+  .login{grid-template-columns:1fr}.login-art{display:none}
+  .side{position:fixed;inset-inline-start:0;transform:translateX(105%)}
+  .side.open{transform:none}
+  .menu-btn{display:grid}
+  .top{padding:0 16px}.content{padding:8px 16px 40px}
+  .sync span{display:none}
+  .flow{grid-template-columns:repeat(2,1fr);row-gap:18px}.flow-line{display:none}
+  .kpi{border-top:1px solid var(--border-2)}
+}
+@media (max-width:520px){.accs,.accs-2,.flow-help,.secs{grid-template-columns:1fr}.top .crumb{display:none}.demo-grid{grid-template-columns:1fr}.hero h2{font-size:21px}.bars .b-row{grid-template-columns:100px 1fr 80px}.clock{font-size:34px}.ops{padding:20px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+
+.mswitch{display:flex;align-items:center;gap:6px;height:40px;padding:0 6px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-inline-start:12px}
+.mswitch b{font-size:14px;min-width:104px;text-align:center;font-weight:700}
+.mswitch small{font-size:11px;color:var(--amber);background:var(--amber-soft);padding:2px 7px;border-radius:999px;font-weight:600}
+.mswitch button{width:30px;height:30px;border:0;background:transparent;border-radius:8px;display:grid;place-items:center;cursor:pointer;color:var(--text)}
+.mswitch button:hover{background:var(--surface-2)} .mswitch button[disabled]{opacity:.3;pointer-events:none}
+.mswitch svg{width:16px;height:16px}
+.icon-btn.sm{width:28px;height:28px} .icon-btn.sm svg{width:15px;height:15px}
+tr.tx-orphan td{background:var(--amber-soft)}
+@media (max-width:760px){.mswitch{margin-inline-start:0}.mswitch b{min-width:80px;font-size:13px}.mswitch small{display:none}}
+
+/* ALSAAD logo */
+.brandmark{display:block;height:auto;color:#fff}
+.brand .brandmark{width:132px}
+.brand-sub{display:flex;flex-direction:column;gap:2px;padding-inline-start:12px;border-inline-start:1px solid #ffffff24}
+.brand-sub span{font-family:'Sora',sans-serif;font-size:11px;font-weight:600;letter-spacing:.32em;color:#A3BEFF}
+.brand-sub small{font-size:11.5px;color:#8E97A8}
+.side .brand{flex-direction:column;align-items:flex-start;gap:10px}
+.side .brand .brand-sub{padding-inline-start:0;border:0;flex-direction:row;align-items:center;gap:8px}
+.login-art .brand .brandmark{width:170px}
+.sp-logo{width:min(380px,74vw);height:auto;color:#5C8DFF;animation:none}
+.sp-logo path{stroke-dasharray:140;stroke-dashoffset:140;animation:spDraw 1.1s cubic-bezier(.6,.05,.3,1) forwards}
+.sp-logo path:nth-child(2){animation-delay:.12s}.sp-logo path:nth-child(3){animation-delay:.24s}.sp-logo path:nth-child(4){animation-delay:.36s}.sp-logo path:nth-child(5){animation-delay:.48s}.sp-logo path:nth-child(6){animation-delay:.6s}
+.sp-done .sp-logo{color:#fff;transition:color .8s ease}
+@keyframes spDraw{to{stroke-dashoffset:0}}
+.sp-line{font-family:'Sora',var(--display);font-weight:300;letter-spacing:-.2px}
+.sp-brand{letter-spacing:.42em;font-size:12px;font-weight:600;color:#5C8DFF}
+@media (prefers-reduced-motion: reduce){.sp-logo path{animation:none;stroke-dashoffset:0}}
+
+.sp-sign{position:absolute;bottom:26px;display:flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-size:12px;font-weight:300;color:#7C8596;letter-spacing:.02em;opacity:0;animation:signIn .8s ease 1.4s forwards}
+.sp-sign b{font-weight:600;color:#C9CFDA}
+.sp-sign i{font-style:normal;font-weight:700;font-size:11px;letter-spacing:.04em;color:#fff;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1px solid #5C8DFF;color:#A3BEFF}
+.made-by{font-family:'Sora',sans-serif;font-size:11.5px;color:var(--faint);text-align:center;margin-top:22px;letter-spacing:.02em}
+.made-by b{font-weight:600;color:var(--text-2)}
+@keyframes signIn{to{opacity:1}}
+@media (prefers-reduced-motion: reduce){.sp-sign{animation:none;opacity:1}}
+
+/* login art: headline + quiet footer */
+.login-art .la-title{font-size:clamp(34px,3.6vw,54px);line-height:1.25;font-weight:700;max-width:560px;letter-spacing:-.4px}
+.login-art .la-title span{display:block;color:#5C8DFF}
+.la-foot{display:flex;gap:40px;padding-top:22px;border-top:1px solid #ffffff1a;max-width:560px}
+.la-foot div{display:flex;flex-direction:column;gap:4px}
+.la-foot small{font-size:11.5px;color:#7C8596}
+.la-foot b{font-size:14px;font-weight:600;color:#E8EBEF}
+
+.trial-bar{display:flex;gap:10px;align-items:flex-start;margin:0 28px;padding:11px 16px;border-radius:12px;background:var(--amber-soft);color:var(--amber);font-size:13px;line-height:1.7}
+.trial-bar svg{width:17px;height:17px;flex:none;margin-top:3px}
+.mswitch small.trial{color:#fff;background:var(--amber)}
+@media (max-width:760px){.trial-bar{margin:0 14px}}
+
+.pw-drawer .login-card{max-width:none;box-shadow:none;padding:0;background:transparent;border:0}
+.side-foot .me button + button{margin-inline-start:2px}
+/* sheets sync + payroll */
+button.sync{border:0;cursor:pointer;font-family:inherit}
+.sync.ok{background:var(--green-soft);color:var(--green)}
+.sync.load{background:var(--surface-2);color:var(--muted)}
+.sync.err{background:var(--red-soft);color:var(--red)}
+.sync svg{width:15px;height:15px}
+.spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.spin{animation:none}}
+.toast.bad svg{color:#FF8A8A}
+.rot-r{transform:rotate(-90deg)} .rot-l{transform:rotate(90deg)}
+table.sheet tr.sel td{background:var(--primary-soft)}
+table.sheet tr.tot-row td{border-top:2px solid var(--border);background:var(--surface-2)}
+.icon-btn[disabled]{opacity:.35;pointer-events:none}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#161A21">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ALSaad October">
+<meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+<div class="splash" id="splash" role="status" aria-live="polite">
+  <div class="sp-inner">
+    <svg class="sp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="3 85.5 193 27.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" role="img" aria-label="ALSAAD"><path d="M6.2,111.6 L25.3,90.4 Q26.6,89 28.6,89 L34,89 L34,111.6"/><path d="M41,87.6 L41,106.4 Q41,110 44.6,110 L63.6,110"/><path d="M90.6,89 L73,89 Q69,89 69,93 L69,96 Q69,99.5 72.5,99.5 L87.5,99.5 Q91,99.5 91,103 L91,106.5 Q91,110 87.5,110 L67.8,110"/><path d="M97.6,111.6 L116.7,90.4 Q118,89 120,89 L125.6,89 L125.6,111.6"/><path d="M134,111.6 L153.3,90.4 Q154.6,89 156.6,89 L162,89 L162,111.6"/><path d="M167.8,89 L184.2,89 Q192.5,89 192.5,97.3 L192.5,101.7 Q192.5,110 184.2,110 L169.2,110 L169.2,97.8"/></svg>
+    <p class="sp-line" dir="ltr"><span class="sp-text"></span><i class="sp-caret"></i></p>
+    <div class="sp-brand" dir="ltr">OCTOBER BRANCH</div>
+  </div>
+  <span class="sp-sign" dir="ltr"><i>MA</i><span>Designed &amp; built by <b>Mohamed Ahmed</b></span></span>
+</div>
+<div id="app"></div>
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"></aside>
+<div class="toast-box" id="toasts"></div>
+<button class="fab" id="aiFab" data-act="ai" aria-label="المساعد الذكي"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>اسأل المساعد</button>
+<div class="cmd" id="cmd" role="dialog" aria-modal="true" aria-label="بحث سريع"></div>
+<aside class="ai" id="ai" aria-hidden="true" aria-label="المساعد الذكي"></aside>
+
+<script>
+/* =========================================================
+   ALSaad October — Work Management System
+   Source of truth = 3 Google Sheets files, read live through the
+   viewer's Google Sheets connector (the page's `mcp` capability):
+   - Shared file (team edits it): الأوردرات / الستوك  — no costs, no money
+   - Accounts file (private):      أسعار الأجهزة / الخزنة
+   - Payroll file (private):       الموظفين / الخصومات والبونص
+   Nothing else is read.
+   ========================================================= */
+
+/* ---------- Icons ---------- */
+const ICONS = {
+  dashboard:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+  orders:'<path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M8 6H6a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-2"/><path d="M9 12h6M9 16h4"/>',
+  truck:'<path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+  box:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/>',
+  wallet:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="15" r="1.2"/>',
+  report:'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M9 17v-3M12 17v-6M15 17v-2"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/>',
+  link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  bell:'<path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+  moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  logout:'<path d="M9 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3"/><path d="M14 8l4 4-4 4M18 12H8"/>',
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  check:'<path d="M5 12l5 5 9-10"/>',
+  refresh:'<path d="M20 11a8 8 0 0 0-14.6-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.6 4.5L20 16"/><path d="M20 20v-4h-4"/>',
+  up:'<path d="M12 19V5M6 11l6-6 6 6"/>',
+  down:'<path d="M12 5v14M6 13l6 6 6-6"/>',
+  copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+  sheet:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 3v18"/>',
+  send:'<path d="M21 4L3 11l6 2 2 6 3-4 5 4z"/>',
+  shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  cash:'<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/>',
+  trend:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  pin:'<path d="M12 21s7-6 7-12a7 7 0 0 0-14 0c0 6 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+  return:'<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  spark:'<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+  stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  alert:'<path d="M12 3.5l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
+  sales:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  bank:'<path d="M3 10l9-6 9 6"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+  arrowL:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  flag:'<path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/>',
+};
+const LOGO_SVG = `<svg class="brandmark" xmlns="http://www.w3.org/2000/svg" viewBox="3 85.5 193 27.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" role="img" aria-label="ALSAAD"><path d="M6.2,111.6 L25.3,90.4 Q26.6,89 28.6,89 L34,89 L34,111.6"/><path d="M41,87.6 L41,106.4 Q41,110 44.6,110 L63.6,110"/><path d="M90.6,89 L73,89 Q69,89 69,93 L69,96 Q69,99.5 72.5,99.5 L87.5,99.5 Q91,99.5 91,103 L91,106.5 Q91,110 87.5,110 L67.8,110"/><path d="M97.6,111.6 L116.7,90.4 Q118,89 120,89 L125.6,89 L125.6,111.6"/><path d="M134,111.6 L153.3,90.4 Q154.6,89 156.6,89 L162,89 L162,111.6"/><path d="M167.8,89 L184.2,89 Q192.5,89 192.5,97.3 L192.5,101.7 Q192.5,110 184.2,110 L169.2,110 L169.2,97.8"/></svg>`;
+const ic = (n, cls='') => `<svg class="i ${cls}" viewBox="0 0 24 24">${ICONS[n]||''}</svg>`;
+
+/* ---------- Helpers ---------- */
+const fmt = n => Math.round(n||0).toLocaleString('en-US');
+const money = n => `${fmt(n)} <small>ج.م</small>`;
+const moneyTxt = n => `${fmt(n)} ج.م`;
+const MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const DAYS = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const dLabel = d => `${d.getDate()} ${MONTHS[d.getMonth()]}`;
+const dShort = d => `${d.getDate()}/${d.getMonth()+1}`;
+const hhmm = d => `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+const isoDay = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const dayFromIso = v => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v||''); return m ? new Date(+m[1], +m[2]-1, +m[3]) : null; };
+const sameDay = (a,b) => a && b && a.toDateString() === b.toDateString();
+const daysSince = d => d ? Math.floor((S.data.today - d)/864e5) : 0;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
+  del(k){try{localStorage.removeItem(k)}catch(e){}},
+};
+
+/* ---------- Sections & users ----------
+   Every screen is a section. A user sees only the sections listed for them.
+   Two extra permissions: `cost` (purchase price & profit) and `review` (mark money as reviewed).
+   To add a person: tell Claude their name and which sections they need — a username/password is created for them. */
+const SECTIONS = [
+  {id:'dashboard',   t:'لوحة التحكم',        i:'dashboard', d:'ملخص اليوم ورحلة الأوردرات والتنبيهات'},
+  {id:'orders',      t:'الأوردرات',          i:'orders',    d:'كل أوردر بالسيريال وتفاصيله وفلوسه'},
+  {id:'shipping',    t:'الشحن والتسليم',     i:'truck',     d:'الأجهزة اللي خرجت فين ووصلت ولا لأ'},
+  {id:'stock',       t:'الستوك والجرد',      i:'box',       d:'الأجهزة الموجودة ومعادلة الجرد'},
+  {id:'money',       t:'الفلوس والخزنة',     i:'wallet',    d:'أرصدة الحسابات والديبوزتات وفلوس شركة الشحن'},
+  {id:'payroll',     t:'المرتبات',           i:'cash',      d:'الموظفين والخصومات والبونص وصافي كل شهر'},
+  {id:'sales',       t:'أداء السيلز',        i:'sales',     d:'كل سيلز باع كام وبكام'},
+  {id:'reports',     t:'التقرير اليومي',     i:'report',    d:'ملخص آخر اليوم'},
+  {id:'users',       t:'المستخدمين والصلاحيات', i:'users',  d:'مين بيدخل وبيشوف إيه'},
+  {id:'connections', t:'ربط جوجل شيت',       i:'link',      d:'الشيتات والأعمدة المطلوبة'},
+];
+const ALL = SECTIONS.map(s=>s.id);
+/* ---------- Server (Google Apps Script, runs as the owner) ----------
+   Logins are checked against the "المستخدمين" sheet in the accounts file. */
+const API_URL = 'https://script.google.com/macros/s/AKfycbynCUV7Q-gb6DxmvP8sbhHzl0If5D2aGMYWba-ioZgiSXiX610fFCkDyk95zUGAnAB9/exec';
+const K = {token:'alsaad_token', user:'alsaad_user', cache:'alsaad_cache_'};
+async function api(action, body={}, timeout=90000){
+  const ctrl = new AbortController(), t = setTimeout(()=>ctrl.abort(), timeout);
+  try{
+    const r = await fetch(API_URL, {method:'POST', body:JSON.stringify({action, token:store.get(K.token), ...body}), signal:ctrl.signal, credentials:'omit'});
+    let j; try{ j = await r.json(); }catch(e){ throw {code:'server_error', message:'السيرفر رجّع رد مش مفهوم'}; }
+    if(!j.ok) throw {code:j.code||'server_error', message:j.message||'حصلت مشكلة'};
+    return j;
+  }catch(e){
+    if(e && e.name==='AbortError') throw {code:'timeout', message:'السيرفر اتأخر في الرد'};
+    if(e && e.code) throw e;
+    throw {code:'network', message:'مفيش نت، أو السيرفر مش بيرد'};
+  }finally{ clearTimeout(t); }
+}
+const nm = n => `<bdi class="uname">${esc(n)}</bdi>`;
+const av = u => `<span class="avatar av-ini" style="background:${u.color}">${u.ini}</span>`;
+
+/* ---------- Business vocabulary (same values as the sheet drop-downs) ---------- */
+const STATUS = {
+  confirmed:{short:'مستني يخرج', color:'#1C4FD6', sheet:'مستني يخرج'},
+  shipping: {short:'في الشحن',  color:'#F59E0B', sheet:'في الشحن'},
+  delivered:{short:'اتسلم',     color:'#10B981', sheet:'اتسلم'},
+  returned: {short:'مرتجع',     color:'#8B5CF6', sheet:'مرتجع'},
+  cancelled:{short:'ملغي',      color:'#EF4444', sheet:'ملغي'},
+};
+const DEV_STATUS = {available:'متاح', reserved:'محجوز لأوردر', shipping:'في الشحن', sold:'اتباع'};
+const ACCOUNTS = ['كاش','إنستاباي','فودافون كاش','فيزا / بنك'];
+const PAY_METHODS = ['كاش','إنستاباي','فودافون كاش'];                                   // طريقة الديبوزت
+const REM_METHODS = ['كاش','إنستاباي','فودافون كاش','فيزا','فيزا تقسيط','فيزا مشتريات']; // طريقة الدفع (الباقي)
+const DELIVERY = ['شحن','استلام من اكتوبر','استلام من مدينة نصر','استلام من وسط البلد','استلام من الفيوم'];
+const isPickup = o => (o.delivery||'').startsWith('استلام');
+const SHIP_LATE_DAYS = 4;
+const TX_IN  = ['رصيد أول الشهر','ديبوزت','باقي أوردر','توريد شركة الشحن','أخرى'];
+const TX_OUT = ['مصاريف شحن','مرتجع لعميل','مصاريف تشغيل','مرتبات','سحب للإدارة','أخرى'];
+
+/* ---------- The Google Sheets files (the only data the system reads) ----------
+   `need(user)` decides whether a file is read at all for that user. */
+const FILES = {
+  ops:{key:'ops', id:'12SvYaRop5AkkFXBA2RyRmy4wKlcvFDsiM7PFyb5PCT8', title:'ALSaad October | الاوردارت',
+       url:'https://docs.google.com/spreadsheets/d/12SvYaRop5AkkFXBA2RyRmy4wKlcvFDsiM7PFyb5PCT8/edit',
+       d:'الملف المشترك: الأوردرات والستوك من غير أسعار شراء ولا فلوس. الفريق (زي كريم) بيسجل فيه.',
+       gids:{orders:0, stock:100},
+       tabs:[{k:'orders', t:'الأوردرات', range:"'الأوردرات'!A1:R5000"},
+             {k:'stock',  t:'الستوك',    range:"'الستوك'!A1:N5000"}]},
+  acc:{key:'acc', id:'1OUaCd6dOTcisKgnFf0slvKtANtrKEKlwxU5ju9eXsCA', title:'ALSaad October | الحسابات',
+       url:'https://docs.google.com/spreadsheets/d/1OUaCd6dOTcisKgnFf0slvKtANtrKEKlwxU5ju9eXsCA/edit',
+       d:'ملف خاص: أسعار الشراء والربح والخزنة. بيتقري بس لليوزر اللي معاه صلاحية الفلوس أو سعر الشرا.',
+       need:u=>u.cost || u.sections.includes('money'), lockMsg:'الملف ده بيتقري بس لليوزر اللي معاه صلاحية الفلوس أو سعر الشرا.',
+       gids:{prices:0, tx:1398649563},
+       tabs:[{k:'prices', t:'أسعار الأجهزة', range:"'أسعار الأجهزة'!A1:H5000"},
+             {k:'tx',     t:'الخزنة',        range:"'الخزنة'!A1:I5000"}]},
+  pay:{key:'pay', id:'159KAuOCk02CwzGMQUD4Z2lILcftpyvL1y6LnXWcQ7ZQ', title:'ALSaad October | المرتبات',
+       url:'https://docs.google.com/spreadsheets/d/159KAuOCk02CwzGMQUD4Z2lILcftpyvL1y6LnXWcQ7ZQ/edit',
+       d:'ملف خاص: الموظفين والخصومات والبونص.', need:u=>u.sections.includes('payroll'), lockMsg:'الملف ده بيتقري بس لليوزر اللي معاه صلاحية المرتبات.',
+       tabs:[{k:'emp', t:'الموظفين',          range:"'الموظفين'!A4:D300"},
+             {k:'adj', t:'الخصومات والبونص',  range:"'الخصومات والبونص'!A4:F1000"}]},
+};
+const GS = 'Google Sheets';
+const SHEET_RULES = [
+  'السطر عمره ما يتمسح. لو في غلط، صلّحه في نفس السطر أو اكتب ملاحظة.',
+  'الجهاز يتسجل في الستوك الأول، وبعدين يتكتب السيريال بتاعه في الأوردر زي ما هو بالظبط.',
+  'التاريخ يتختار من النتيجة، والأرقام تتكتب أرقام بس من غير "ج" أو مسافات.',
+  'أي فلوس تدخل أو تطلع تتسجل في الخزنة في نفس اليوم، على الحساب اللي دخلت فيه فعلاً.',
+  'أسامي الأعمدة متتغيرش، السيستم بيقرأ بيها.',
+  'الشيتات مش بتتحدث في السيستم لحظة بلحظة: السيستم بيقرأها كل 3 دقايق، أو لما تدوس "تحديث".',
+];
+
+/* ---------- Reading the sheets ---------- */
+const START_DATE = new Date(2026, 10, 1);   // TRIAL: November 2026 is open as a trial month (real start: 1 December 2026)
+const TRIAL_MONTH = {y:2026, m:10};          // remove on 30 Nov after the trial data is cleared
+const isTrial = () => S.month && S.month.y===TRIAL_MONTH.y && S.month.m===TRIAL_MONTH.m;
+const monthStartFor = d => { const m = new Date(d.getFullYear(), d.getMonth(), 1); return m < START_DATE ? new Date(START_DATE) : m; };
+const toNum = v => { if(v==null || v==='') return 0; const t = String(v).replace(/[٠-٩]/g, c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(/[^0-9.\-]/g,''); const n = parseFloat(t); return isNaN(n) ? 0 : n; };
+const toDate = v => { const x = String(v||'').trim(); const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(x); if(m) return new Date(+m[3], +m[2]-1, +m[1]); return dayFromIso(x.slice(0,10)); };
+const isTrue = v => String(v).trim().toUpperCase()==='TRUE';
+/* rows -> objects, by header name (so a moved column doesn't break anything) */
+function sheetRows(values, firstRow=1){
+  const [head=[], ...rows] = values || [];
+  const names = head.map(h=>String(h).trim());
+  const col = name => { let i = names.indexOf(name); if(i<0) i = names.findIndex(n=>n.startsWith(name)); return i; };
+  const cache = {};
+  return rows.map((r,i)=>({ row:firstRow+1+i, v:name => { const c = name in cache ? cache[name] : (cache[name] = col(name)); return c<0 ? '' : String(r[c] ?? '').trim(); } }));
+}
+const SYNC = {state:'idle', at:null, code:null, msg:'', parts:{}};
+const SYNC_MSG = {
+  network:'مفيش نت، أو السيرفر مش بيرد. بيعرض آخر داتا اتقرت، وهيحاول تاني لوحده.',
+  timeout:'السيرفر اتأخر في الرد. بيعرض آخر داتا اتقرت، وهيحاول تاني لوحده.',
+  server_error:'حصلت مشكلة في السيرفر وهو بيقرأ الشيتات.',
+  unauthorized:'الجلسة خلصت، سجّل دخول تاني.',
+  nomcp:'السيستم لازم يتفتح من claude.ai (أو من أيقونة السيستم على الديسكتوب) عشان يقرأ الشيتات.',
+  not_granted:'السيستم لازم يتفتح من claude.ai (أو من أيقونة السيستم على الديسكتوب) عشان يقرأ الشيتات.',
+  capability_disabled:'النسخة دي من السيستم مش قادرة توصل لجوجل شيت. افتحه من claude.ai.',
+  capability_removed:'النسخة دي من السيستم مش قادرة توصل لجوجل شيت. افتحه من claude.ai.',
+  server_not_connected:'Google Sheets مش متوصل في حسابك. ضيفه من claude.ai ← Settings ← Connectors، وبعدين دوس تحديث.',
+  needs_reauth:'صلاحية Google Sheets خلصت. اعمل Reconnect من claude.ai ← Settings ← Connectors، وبعدين دوس تحديث.',
+  not_in_manifest:'إذن جوجل شيت مش مفعّل للسيستم. افتح السيستم في claude.ai واسمح لـ Google Sheets.',
+  approval_required:'السيستم محتاج موافقتك عشان يقرأ الشيتات. دوس "تحديث" ووافق على الطلب.',
+  consent_required:'السيستم محتاج موافقتك عشان يقرأ الشيتات. دوس "تحديث" ووافق على الطلب.',
+  selection_required:'عندك أكتر من Google Sheets متوصل. اختار واحد من الرسالة اللي ظهرت في claude.ai.',
+  blocked_by_policy:'إعدادات الحساب مانعة السيستم يستخدم جوجل شيت.',
+  server_unavailable:'جوجل شيت مش بيرد دلوقتي. هيحاول تاني لوحده.',
+  upstream_error:'حصلت مشكلة في الاتصال بجوجل شيت. دوس تحديث كمان شوية.',
+  tool_error:'جوجل شيت رفض القراءة',
+};
+const TRANSIENT = ['server_unavailable','upstream_error','rate_limited','tool_error'];
+let MCP_P = null;
+const getMcp = () => MCP_P || (MCP_P = (window.claude && typeof window.claude.use==='function') ? window.claude.use('mcp').catch(()=>null) : Promise.resolve(null));
+const sleep = ms => new Promise(r=>setTimeout(r, ms));
+async function gsRead(mcp, file, range, retried=false){
+  try{
+    const r = await mcp.callTool(GS, 'get_values', {spreadsheetId:file.id, range}, {cache:false});
+    const p = r && r.payload;
+    if(typeof p === 'string') throw {code:'tool_error', message:p};
+    return (p && (p.values || (p.content && p.content.values))) || [];
+  }catch(e){
+    if(e && e.retryable && !retried){ await sleep(Math.min(e.retryAfterMs||1500, 8000) + Math.random()*600); return gsRead(mcp, file, range, true); }
+    throw e;
+  }
+}
+const DataSource = {
+  empty(){ return {devices:[], orders:[], tx:[], emp:[], adj:[], today:new Date(), monthStart:monthStartFor(new Date()), raw:{}}; },
+  /* last data read on this device, shown instantly while the server answers */
+  fromCache(){
+    const c = store.get(K.cache + (me()||{}).u); if(!c || !c.tabs) return null;
+    const d = normalize(c.tabs, this.empty()); d.cachedAt = c.at; return d;
+  },
+  async load(prev, fresh){
+    const t = window.__ALSAAD_TEST__;          // test fixture hook (unused in production)
+    if(t) return t();
+    const base = this.empty();
+    const jobs = [];
+    Object.values(FILES).forEach(f=>{ if(f.need && !f.need(me())) return; f.tabs.forEach(tb=>jobs.push({f, tb})); });
+    let r;
+    try{ r = await api('data', {fresh:!!fresh}); }
+    catch(e){
+      if(e.code==='unauthorized'){ sessionExpired(); return prev || base; }
+      Object.assign(SYNC, {state: prev && prev.raw && Object.keys(prev.raw).length ? 'partial' : 'error', code:e.code, msg:SYNC_MSG[e.code]||e.message, parts:{}});
+      return prev || base;
+    }
+    if(r.user){ const changed = JSON.stringify(r.user.sections)!==JSON.stringify(me().sections) || r.user.cost!==me().cost || r.user.review!==me().review;
+      S.user = Object.assign(S.user||{}, r.user); store.set(K.user, S.user); if(changed && !can(S.view)) S.view = 'dashboard'; }
+    const raw = r.tabs || {}, parts = {};
+    jobs.forEach(({tb})=>{ if(raw[tb.k]) parts[tb.k] = {ok:true, rows:Math.max(0, raw[tb.k].length-1)};
+      else { const m = (r.errors||{})[tb.k]; parts[tb.k] = {ok:false, code:'tool_error', msg:'الصفحة دي مقريتش' + (m ? `: ${String(m).slice(0,140)}` : '')}; } });
+    const failed = Object.values(parts).filter(x=>!x.ok);
+    Object.assign(SYNC, {parts, at:new Date(), code:null, state: !failed.length ? 'ok' : failed.length===jobs.length ? 'error' : 'partial',
+      msg: failed.length ? 'في صفحات مقريتش، التفاصيل في صفحة ربط جوجل شيت.' : ''});
+    store.set(K.cache + me().u, {at:Date.now(), tabs:raw});
+    return normalize(raw, base);
+  }
+};
+const SHEET_STATUS = Object.fromEntries(Object.entries(STATUS).map(([k,v])=>[v.sheet,k]));
+/* "Mohamed، 24/11/2026 14:30" -> {reviewedBy, reviewedAt} */
+function parseStamp(v){ if(!v) return {reviewedBy:null, reviewedAt:null}; const [by, when=''] = String(v).split('، ');
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/.exec(when.trim());
+  return {reviewedBy:by || null, reviewedAt: m ? new Date(+m[3], +m[2]-1, +m[1], +(m[4]||0), +(m[5]||0)) : null}; }
+const sheetLink = (file, tab, row) => `${file.url}#gid=${file.gids[tab]}${row?`&range=A${row}`:''}`;
+function normalize(raw, base){
+  const d = base;
+  d.raw = raw;
+  const price = new Map(sheetRows(raw.prices).filter(r=>r.v('S/N')).map(r=>[r.v('S/N'), {cost:toNum(r.v('سعر الشراء')), suggested:toNum(r.v('سعر البيع المقترح'))}]));
+  d.devices = sheetRows(raw.stock).filter(r=>r.v('S/N')).map(r=>({
+    sn:r.v('S/N'), row:r.row, brand:r.v('الماركة'), model:[r.v('الماركة'), r.v('الموديل')].filter(Boolean).join(' ') || 'جهاز من غير موديل',
+    cpu:r.v('البروسيسور'), ram:r.v('الرام'), hard:r.v('الهارد'), gpu:r.v('كارت الشاشة'), screen:r.v('الشاشة'), condition:r.v('الحالة الخارجية'),
+    adapter:r.v('الشاحن'), cost:(price.get(r.v('S/N'))||{}).cost||0, suggested:(price.get(r.v('S/N'))||{}).suggested||0, noPrice:!price.has(r.v('S/N')), source:r.v('المصدر') || 'وارد جديد',
+    added:toDate(r.v('تاريخ الدخول')) || new Date(d.monthStart), notes:r.v('ملاحظات') }));
+  const bySn = new Map(d.devices.map(x=>[x.sn, x]));
+  d.orders = sheetRows(raw.orders).filter(r=>r.v('S/N') || r.v('سعر البيع')).map(r=>{
+    const sn = r.v('S/N'), dev = bySn.get(sn);
+    return {id:'r'+r.row, row:r.row, sn, created:toDate(r.v('التاريخ')) || new Date(d.today), price:toNum(r.v('سعر البيع')), rep:r.v('السيلز'),
+      customer:r.v('اسم العميل'), phone:r.v('التليفون'), delivery:r.v('التسليم'), address:r.v('العنوان'), deposit:toNum(r.v('ديبوزت')),
+      depositMethod:r.v('طريقة الديبوزت'), remMethod:r.v('طريقة الدفع'), status:SHEET_STATUS[r.v('الحالة')] || 'confirmed', noStatus:!r.v('الحالة'),
+      shipCost:toNum(r.v('مصاريف شحن علينا')), cod:isTrue(r.v('تحصيل شركة الشحن')), notes:r.v('ملاحظات'), reviewed:isTrue(r.v('اتراجع (')), ...parseStamp(r.v('اتراجع بواسطة')),
+      model:dev ? dev.model : 'جهاز مش في الستوك', cpu:dev?dev.cpu:'', ram:dev?dev.ram:'', hard:dev?dev.hard:'', cost:dev?dev.cost:0, noStock:!dev};
+  });
+  d.tx = sheetRows(raw.tx).filter(r=>toNum(r.v('المبلغ'))>0).map(r=>({row:r.row, t:toDate(r.v('التاريخ')) || new Date(d.today),
+    type:r.v('النوع')==='خرج' ? 'out' : 'in', cat:r.v('البند'), amount:toNum(r.v('المبلغ')), account:r.v('الحساب'), sn:r.v('S/N'), note:r.v('التفاصيل'), by:r.v('المسؤول')}));
+  d.emp = sheetRows(raw.emp, 4).filter(r=>r.v('الكود') && r.v('الاسم')).map(r=>({code:toNum(r.v('الكود')), name:r.v('الاسم'), job:r.v('الوظيفة'), salary:toNum(r.v('المرتب الثابت'))}));
+  d.adj = sheetRows(raw.adj, 4).filter(r=>toNum(r.v('المبلغ'))>0 && toDate(r.v('التاريخ'))).map(r=>({t:toDate(r.v('التاريخ')), code:toNum(r.v('الكود')), name:r.v('الاسم'),
+    type:r.v('النوع')==='بونص' ? 'bonus' : 'ded', amount:toNum(r.v('المبلغ')), reason:r.v('السبب')}));
+  return d;
+}
+/* Payroll for one month: fixed − deductions + bonus, from the payroll file */
+function payrollFor(y, m){
+  const inM = a => a.t.getFullYear()===y && a.t.getMonth()===m;
+  const adj = S.data.adj.filter(inM);
+  const rows = S.data.emp.map(e=>{ const mine = adj.filter(a=>a.code===e.code);
+    const ded = mine.filter(a=>a.type==='ded').reduce((s,a)=>s+a.amount,0), bonus = mine.filter(a=>a.type==='bonus').reduce((s,a)=>s+a.amount,0);
+    return {...e, ded, bonus, net:e.salary-ded+bonus, n:mine.length}; });
+  const sum = k => rows.reduce((s,r)=>s+r[k],0);
+  return {rows, adj, salary:sum('salary'), ded:sum('ded'), bonus:sum('bonus'), net:sum('net'), orphan:adj.filter(a=>!S.data.emp.some(e=>e.code===a.code))};
+}
+
+/* ---------- App state ---------- */
+const S = {
+  user:null, view:'dashboard', data:null, theme: store.get('theme') || 'light',
+  orderFilter:{q:'', status:'all', day:null, review:false}, shipFilter:'active', stockFilter:{q:'', status:'all'},
+  moneyFilter:{account:'all', type:'all'}, counted:new Set(), reportDay:1, introDone:false, payMonth:null, payEmp:null,
+};
+document.documentElement.dataset.theme = S.theme;
+const me = () => S.user;
+const can = v => me().sections.includes(v);
+
+/* Period: the month being tracked */
+const P = {
+  get start(){ return S.data.monthStart; },
+  get y(){ return this.start.getFullYear(); }, get m(){ return this.start.getMonth(); },
+  get monthName(){ return MONTHS[this.m]; },
+  get daysInMonth(){ return new Date(this.y, this.m+1, 0).getDate(); },
+  get started(){ return S.data.today >= this.start; },
+  get daysLeft(){ return Math.max(0, Math.ceil((this.start - S.data.today)/864e5)); },
+  get elapsed(){ if(!this.started) return 0; const t = S.data.today; return (t.getFullYear()===this.y && t.getMonth()===this.m) ? t.getDate() : this.daysInMonth; },
+  date(day, h=0, mi=0){ return new Date(this.y, this.m, day, h, mi); },
+};
+
+/* ---------- Money model ----------
+   سعر البيع = الديبوزت + الباقي
+   الباقي بيتدفع بطريقة الدفع (كاش، إنستاباي، فودافون كاش، فيزا...)، أو بيتحصل عن طريق شركة الشحن لو "تحصيل شركة الشحن" متعلّم.
+   فلوس التحصيل بتتحسب إجمالي: اللي اتحصل من العملاء ناقص اللي شركة الشحن ورّدته (من تاب الخزنة). */
+function moneyOf(o){
+  const deposit = Math.min(o.deposit||0, o.price);
+  const rest = Math.max(0, o.price - deposit);
+  const done = ['delivered'].includes(o.status);
+  const cod = !!o.cod;
+  let state, label, tone;
+  if(o.status==='cancelled'){
+    state = deposit ? 'refund' : 'none'; tone = deposit ? 'red' : 'muted';
+    label = deposit ? `ملغي وعليه ديبوزت ${fmt(deposit)}، اتأكد إنه رجع` : 'ملغي';
+  } else if(o.status==='returned'){
+    state = 'refund'; tone = 'violet'; label = 'مرتجع، اتأكد إن الفلوس رجعت للعميل';
+  } else if(rest===0){
+    state = 'paid'; tone = 'green'; label = 'مدفوع بالكامل';
+  } else if(!done){
+    state = 'pending'; tone = 'amber'; label = deposit ? `ديبوزت ${fmt(deposit)}، باقي ${fmt(rest)}` : `باقي ${fmt(rest)} عند الاستلام`;
+  } else if(cod){
+    state = 'courier'; tone = 'sky'; label = `${fmt(rest)} اتحصلت عن طريق شركة الشحن`;
+  } else {
+    state = 'collected'; tone = 'green'; label = 'اتحصل بالكامل';
+  }
+  // what should be in the treasury for this S/N (deposit + remainder collected directly, not via courier)
+  const expectedDirect = (o.status==='cancelled'||o.status==='returned') ? null : deposit + (done && !cod ? rest : 0);
+  const inTreasury = (S.all||S.data).tx.filter(t=>t.type==='in' && t.sn===o.sn && (t.cat==='ديبوزت'||t.cat==='باقي أوردر')).reduce((a,t)=>a+t.amount,0);
+  const mismatch = expectedDirect!=null && inTreasury !== expectedDirect;
+  if(mismatch && (state==='collected'||state==='paid')){
+    const diff = expectedDirect - inTreasury; tone = 'red';
+    label = diff>0 ? `ناقص ${fmt(diff)} في الخزنة` : `زيادة ${fmt(-diff)} في الخزنة`;
+  }
+  return {deposit, rest, cod, state, label, tone, expectedDirect, inTreasury, mismatch};
+}
+const MSTATE_CHIP = m => `<span class="chip plain tone-${m.tone==='muted'?'blue':m.tone}" ${m.tone==='muted'?'style="background:var(--surface-2);color:var(--muted)"':''}>${esc(m.label)}</span>`;
+
+/* ---------- Derived numbers ---------- */
+function stats(){
+  const {orders, devices, tx, today} = S.data;
+  const active = orders.filter(o=>!['cancelled','returned'].includes(o.status));
+  const todayOrders = orders.filter(o=>sameDay(o.created,today));
+  const revenue = active.reduce((s,o)=>s+o.price,0);
+  const shipOnUs = active.reduce((s,o)=>s+(o.shipCost||0),0);   // مصاريف شحن علينا
+  const profit = active.reduce((s,o)=>s+(o.price-(o.cost||0)),0) - shipOnUs;
+  const by = st => orders.filter(o=>o.status===st).length;
+  const txUpto = S.data.txUpto || tx, ordersUpto = S.data.ordersUpto || orders;
+  const accounts = Object.fromEntries(ACCOUNTS.map(a=>[a, txUpto.filter(t=>t.account===a).reduce((s,t)=>s+(t.type==='in'?t.amount:-t.amount),0)]));
+  const opening_balance = txUpto.filter(t=>t.t < P.start).reduce((s,t)=>s+(t.type==='in'?t.amount:-t.amount),0);
+  const balance = Object.values(accounts).reduce((a,b)=>a+b,0);
+  const mo = ordersUpto.map(o=>({o, m:moneyOf(o)}));
+  const courierCollected = mo.filter(x=>x.m.state==='courier').reduce((s,x)=>s+x.m.rest,0);
+  const courierRemitted = txUpto.filter(t=>t.type==='in' && t.cat==='توريد شركة الشحن').reduce((s,t)=>s+t.amount,0);
+  const atCourier = Math.max(0, courierCollected - courierRemitted);
+  const pendingRest = mo.filter(x=>x.m.state==='pending').reduce((s,x)=>s+x.m.rest,0);
+  const toReview = orders.filter(o=>!o.reviewed && !(o.status==='cancelled' && !o.deposit));
+  const opening = devices.filter(d=>d.added < P.start && !['sold','shipping'].includes(d.atStart)).length;   // carried over from last month
+  const incoming = devices.filter(d=>d.added >= P.start).length;
+  const out = orders.filter(o=>o.status!=='cancelled').length;
+  const returns = by('returned');
+  const expected = opening + incoming - out + returns;
+  const available = devices.filter(d=>d.status==='available');
+  return {opening_balance, active, todayOrders, revenue, profit, by, accounts, balance, atCourier, courierCollected, courierRemitted, pendingRest, toReview, opening, incoming, out, returns, expected, available};
+}
+
+/* Link devices to orders by S/N */
+/* ---------- Months: every number is for the selected month ----------
+   S.all = everything read from the sheets. S.data = the selected month:
+   orders and treasury moves dated in the month, devices that had entered by its end,
+   and balances / device status carried over up to its end. */
+const monthOf = d => ({y:d.getFullYear(), m:d.getMonth()});
+const defaultMonth = () => monthOf(monthStartFor(new Date()));
+const minMonth = () => monthOf(START_DATE);
+const mIndex = mo => mo.y*12 + mo.m;
+function applyMonth(){
+  const A = S.all; if(!A) return;
+  if(!S.month) S.month = defaultMonth();
+  const start = new Date(S.month.y, S.month.m, 1), end = new Date(S.month.y, S.month.m+1, 1);
+  const inM = d => d >= start && d < end, upto = d => d < end;
+  S.data = {...A, monthStart:start, monthEnd:end,
+    orders:A.orders.filter(o=>inM(o.created)), ordersUpto:A.orders.filter(o=>upto(o.created)),
+    tx:A.tx.filter(t=>inM(t.t)), txUpto:A.tx.filter(t=>upto(t.t)),
+    devices:A.devices.filter(d=>upto(d.added)).map(d=>({...d}))};
+  linkData();
+}
+function setMonth(step){
+  const n = new Date(S.month.y, S.month.m + step, 1), mo = monthOf(n);
+  if(mIndex(mo) < mIndex(minMonth()) || mIndex(mo) > mIndex(defaultMonth())) return;
+  S.month = mo; S.payEmp = null; S.orderFilter.day = null; applyMonth();
+  S.reportDay = Math.max(P.elapsed,1); renderShell();
+}
+/* Link devices to orders by S/N: status at the end of the month, and at its start */
+function linkData(){
+  const {devices} = S.data, orders = [...(S.data.ordersUpto || S.data.orders)].sort((a,b)=>a.created-b.created);
+  const start = S.data.monthStart;
+  const step = (dev, o) => {
+    if(o.status==='confirmed') return {status:'reserved', order:o};
+    if(o.status==='shipping') return {status:'shipping', order:o};
+    if(o.status==='delivered') return {status:'sold', order:o};
+    if(o.status==='returned') return {status:'available', order:null, returned:true};
+    return null; };
+  devices.forEach(d=>{ d.status='available'; d.returned=false; d.order=null; d.atStart='available'; });
+  orders.forEach(o=>{
+    const dev = devices.find(d=>d.sn===o.sn); if(!dev) return;
+    const r = step(dev, o); if(!r) return;
+    dev.status = r.status; dev.order = r.order; if(r.returned) dev.returned = true;
+    if(o.created < start) dev.atStart = r.status;
+  });
+}
+
+/* ---------- Alerts & data checks ---------- */
+function alerts(){
+  const {orders, devices, tx} = S.data, out = [];
+  const add = (level, icon, t, list, go, apply) => { if(list.length) out.push({level, icon, t, n:list.length, list, go, apply}); };
+  const s = stats();
+  if(me().review) add('red','flag','أوردرات مستنية مراجعة الفلوس', s.toReview, 'orders', ()=>{ S.orderFilter = {q:'', status:'all', day:null, review:true}; });
+  add('amber','truck',`في الشحن بقالها أكتر من ${SHIP_LATE_DAYS} أيام من يوم الأوردر`, orders.filter(o=>o.status==='shipping' && daysSince(o.created)>SHIP_LATE_DAYS), 'shipping', ()=>{ S.shipFilter='shipping'; });
+  if(can('money') && s.atCourier>0) out.push({level:'amber', icon:'clock', t:'فلوس عند شركة الشحن لسه ماتوردتش', n:fmt(s.atCourier), list:[], go:'money'});
+  if(can('money')) add('red','alert','فرق بين الأوردر والخزنة', orders.filter(o=>moneyOf(o).mismatch && o.status==='delivered'), 'orders', ()=>{ S.orderFilter = {q:'', status:'delivered', day:null, review:false}; });
+  // data checks — catch rows that fell between the sheets
+  add('red','alert','سيريال في الأوردرات مش موجود في شيت الستوك', orders.filter(o=>!devices.some(d=>d.sn===o.sn)), 'orders');
+  const activeBySn = {}; orders.filter(o=>['confirmed','shipping','delivered'].includes(o.status)).forEach(o=>(activeBySn[o.sn]=activeBySn[o.sn]||[]).push(o));
+  add('red','alert','جهاز متسجل في أكتر من أوردر', Object.values(activeBySn).filter(l=>l.length>1).flat(), 'orders');
+  add('amber','info','أوردرات ناقصها بيانات (سعر، تليفون، سيلز، أو سيريال)', orders.filter(o=>!o.price || !o.phone || !o.rep || !o.sn), 'orders');
+  add('amber','box','أوردرات سيريالها مش موجود في الستوك', orders.filter(o=>o.sn && o.noStock), 'orders');
+  if(me().review && S.all){ const old = S.all.orders.filter(o=>o.created < P.start && !o.reviewed && !(o.status==='cancelled' && !o.deposit)).sort((a,b)=>a.created-b.created);
+    add('red','flag','أوردرات من شهور قبل كده فلوسها لسه متراجعتش', old, 'orders', ()=>{ S.month = monthOf(old[0].created); applyMonth(); S.orderFilter = {q:'', status:'all', day:null, review:true}; }); }
+  if(me().cost && SYNC.parts.prices && SYNC.parts.prices.ok) add('amber','box','أجهزة في الستوك لسه ملهاش سعر شراء في ملف الحسابات', devices.filter(d=>d.noPrice), 'stock');
+  if(can('money')) add('amber','info','حركة خزنة على سيريال مش في الأوردرات', tx.filter(t=>t.sn && !(S.all||S.data).orders.some(o=>o.sn===t.sn)), 'money');
+  return out;
+}
+
+/* ---------- Render: login ---------- */
+function renderLogin(err=''){
+  document.getElementById('app').innerHTML = `
+  <div class="login">
+    <section class="login-art" id="loginArt">
+      <div class="brand">${LOGO_SVG}<div class="brand-sub"><span dir="ltr">OCTOBER</span><small>نظام إدارة الشغل</small></div></div>
+      <h1 class="la-title">كل جهاز ليه سيريال،<span>وكل جنيه ليه مكان.</span></h1>
+      <div class="la-foot">
+        <div><small>النهارده</small><b id="laDate">${DAYS[new Date().getDay()]} ${dLabel(new Date())} ${new Date().getFullYear()}</b></div>
+        <div><small>الساعة</small><b id="laTime" class="num" dir="ltr">${hhmm(new Date())}</b></div>
+        <div><small>الإصدار</small><b class="num" dir="ltr">v1.0</b></div>
+      </div>
+    </section>
+    <section class="login-form">
+      <form class="login-card" id="loginForm" novalidate>
+        <h2>أهلاً بيك</h2>
+        <p class="sub">سجّل دخولك عشان تكمل على السيستم</p>
+        <div class="field"><label for="lu">اسم المستخدم</label><input class="input" id="lu" autocomplete="username" placeholder="مثلاً: mohamed" dir="ltr" style="text-align:right"></div>
+        <div class="field"><label for="lp">كلمة السر</label><input class="input" id="lp" type="password" autocomplete="current-password" placeholder="••••"></div>
+        <div class="err" role="alert">${esc(err)}</div>
+        <button class="btn btn-primary btn-block" type="submit">دخول</button>
+        <p class="made-by" dir="ltr">Designed &amp; built by <b>Mohamed Ahmed</b></p>
+      </form>
+    </section>
+  </div>`;
+  document.getElementById('loginForm').onsubmit = e => { e.preventDefault(); login(document.getElementById('lu').value.trim().toLowerCase(), document.getElementById('lp').value); };
+  const art = document.getElementById('loginArt');
+  clearInterval(renderLogin.t); renderLogin.t = setInterval(()=>{ const el = document.getElementById('laTime'); if(!el) return clearInterval(renderLogin.t); el.textContent = hhmm(new Date()); }, 15000);
+  art.addEventListener('pointermove', e => { const r = art.getBoundingClientRect(); art.style.setProperty('--mx', (e.clientX-r.left)+'px'); art.style.setProperty('--my', (e.clientY-r.top)+'px'); });
+}
+async function login(u,p){
+  if(!u || !p) return renderLogin('اكتب اسم المستخدم وكلمة السر');
+  const btn = document.querySelector('#loginForm button[type=submit]');
+  if(btn){ btn.disabled = true; btn.innerHTML = `${ic('refresh','spin')} بيدخل...`; }
+  try{
+    const r = await api('login', {u, p}, 45000);
+    store.set(K.token, r.token); S.user = r.user; store.set(K.user, r.user);
+    if(r.user.mustChange) return renderChangePassword(p, true);
+    await boot();
+  }catch(e){ renderLogin(e.message || 'مقدرتش أدخل، جرّب تاني'); }
+}
+/* Change password: forced on first login (temporary password), or from the sidebar */
+function renderChangePassword(oldP, forced, err=''){
+  const root = forced ? document.getElementById('app') : null;
+  const form = `<form class="login-card" id="pwForm" novalidate>
+      <h2>${forced?'اختار باسورد جديد':'غيّر الباسورد'}</h2>
+      <p class="sub">${forced?'الباسورد اللي دخلت بيه مؤقت. اختار باسورد ليك انت بس، 6 حروف أو أرقام على الأقل.':'اكتب الباسورد الحالي والجديد.'}</p>
+      ${forced?'':`<div class="field"><label for="po">الباسورد الحالي</label><input class="input" id="po" type="password" autocomplete="current-password"></div>`}
+      <div class="field"><label for="pn">الباسورد الجديد</label><input class="input" id="pn" type="password" autocomplete="new-password"></div>
+      <div class="field"><label for="pc">اكتبه تاني</label><input class="input" id="pc" type="password" autocomplete="new-password"></div>
+      <div class="err" role="alert">${esc(err)}</div>
+      <button class="btn btn-primary btn-block" type="submit">حفظ الباسورد</button>
+    </form>`;
+  if(forced){ root.innerHTML = `<div class="login"><section class="login-art" id="loginArt"><div class="brand">${LOGO_SVG}<div class="brand-sub"><span dir="ltr">OCTOBER</span><small>نظام إدارة الشغل</small></div></div><h1 class="la-title">أهلاً ${esc(me().first)}،<span>خطوة واحدة وتبدأ.</span></h1><div></div></section><section class="login-form">${form}</section></div>`; }
+  else { openDrawer(`<div class="drawer-h"><div><h3>الباسورد</h3><div class="cell-sub">${esc(me().name)}</div></div><button class="icon-btn" data-act="close" aria-label="إغلاق">${ic('x')}</button></div><div class="drawer-b pw-drawer">${form}</div>`); }
+  document.getElementById(forced?'pn':'po').focus();
+  document.getElementById('pwForm').onsubmit = async e => {
+    e.preventDefault();
+    const o = forced ? oldP : document.getElementById('po').value, n = document.getElementById('pn').value, c = document.getElementById('pc').value;
+    const fail = m => { const el = document.querySelector('#pwForm .err'); el.textContent = m; };
+    if(n.length < 6) return fail('الباسورد لازم يكون 6 حروف أو أرقام على الأقل');
+    if(n !== c) return fail('الباسوردين مش زي بعض');
+    if(n === o) return fail('اختار باسورد غير المؤقت');
+    const b = e.target.querySelector('button[type=submit]'); b.disabled = true; b.innerHTML = `${ic('refresh','spin')} بيحفظ...`;
+    try{ await api('changePassword', {old:o, p:n}); S.user.mustChange = false; store.set(K.user, S.user); toast('الباسورد اتغيّر');
+      if(forced) boot(); else closeDrawer(); }
+    catch(er){ if(er.code==='unauthorized') return sessionExpired(); b.disabled = false; b.textContent = 'حفظ الباسورد'; fail(er.message || 'مقدرتش أحفظ'); }
+  };
+}
+function sessionExpired(){ logout(); renderLogin('الجلسة خلصت، سجّل دخول تاني'); }
+function logout(){ const tk = store.get(K.token); if(tk) api('logout').catch(()=>{}); S.introDone=false; closeCmd(); closeAI(); closeDrawer(); AI.msgs=[]; document.body.classList.remove('logged'); if(S.user) store.del(K.cache + S.user.u); S.user=null; store.del(K.token); store.del(K.user); S.all=null; location.hash=''; renderLogin(); }
+
+/* ---------- Render: shell ---------- */
+const NAV = [
+  {group:'التشغيل'}, {id:'dashboard'}, {id:'orders', count:()=>stats().toReview.length, red:true}, {id:'shipping', count:()=>stats().by('shipping'), warn:true}, {id:'stock'},
+  {group:'الفلوس والمتابعة'}, {id:'money'}, {id:'payroll'}, {id:'sales'}, {id:'reports'},
+  {group:'الإدارة'}, {id:'users'}, {id:'connections'},
+];
+const SEC = id => SECTIONS.find(s=>s.id===id);
+const TITLE = id => SEC(id)?.t || '';
+
+function monthSwitch(){
+  const atMin = mIndex(S.month) <= mIndex(minMonth()), atMax = mIndex(S.month) >= mIndex(defaultMonth());
+  return `<div class="mswitch" role="group" aria-label="الشهر">
+    <button data-pm="-1" ${atMin?'disabled':''} aria-label="الشهر اللي فات" title="الشهر اللي فات">${ic('down','rot-r')}</button>
+    <b>${MONTHS[S.month.m]} ${S.month.y}</b>${isTrial()?'<small class="trial">تجربة</small>':atMax?'':'<small>شهر قديم</small>'}
+    <button data-pm="1" ${atMax?'disabled':''} aria-label="الشهر اللي بعده" title="الشهر اللي بعده">${ic('down','rot-l')}</button></div>`;
+}
+function syncChip(){
+  const st = SYNC.state, at = SYNC.at ? hhmm(SYNC.at) : '';
+  const cls = st==='ok' ? 'ok' : st==='loading' || st==='idle' ? 'load' : st==='partial' ? '' : 'err';
+  const label = st==='ok' ? `متربط، آخر تحديث ${at}` : st==='loading' || st==='idle' ? 'بيقرأ الشيتات...' : st==='partial' ? 'في صفحات مقريتش' : 'الشيتات مش واصلة';
+  const tip = st==='ok' ? 'دوس عشان تقرأ الشيتات تاني دلوقتي' : (SYNC.msg || 'دوس عشان تحاول تاني');
+  return `<button class="sync ${cls}" id="syncChip" data-act="sync" title="${esc(tip)}" aria-label="${esc(label)}">${st==='loading'||st==='idle'?ic('refresh','spin'):'<i></i>'}<span>${esc(label)}</span></button>`;
+}
+function refreshSyncChip(){ const el = document.getElementById('syncChip'); if(el) el.outerHTML = syncChip(); }
+function renderShell(){
+  const u = me();
+  let items = NAV.filter(n=>n.group || can(n.id));
+  items = items.filter((n,i)=>!n.group || (items[i+1] && !items[i+1].group));
+  const al = alerts();
+  document.getElementById('app').innerHTML = `
+  <div class="shell">
+    <aside class="side" id="side">
+      <div class="brand">${LOGO_SVG}<div class="brand-sub"><span dir="ltr">OCTOBER</span><small>نظام إدارة الشغل</small></div></div>
+      <nav class="nav">
+        ${items.map(n=> n.group ? `<div class="nav-label">${n.group}</div>` :
+          `<a href="#${n.id}" data-nav="${n.id}" class="${S.view===n.id?'active':''}">${ic(SEC(n.id).i)}<span>${SEC(n.id).t}</span>${n.count && n.count()?`<span class="count ${n.red?'red':n.warn?'warn':''}">${n.count()}</span>`:''}</a>`).join('')}
+      </nav>
+      <div class="side-foot">
+        <div class="me">${av(u)}<div><b>${nm(u.name)}</b><small>${u.title}</small></div><button data-act="password" title="غيّر الباسورد" aria-label="غيّر الباسورد">${ic('lock')}</button><button data-act="logout" title="تسجيل خروج" aria-label="تسجيل خروج">${ic('logout')}</button></div>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="top">
+        <button class="icon-btn menu-btn" data-act="menu" aria-label="القائمة">${ic('menu')}</button>
+        <div><h1 id="pageTitle">${TITLE(S.view)}</h1><div class="crumb">${DAYS[S.data.today.getDay()]} ${dLabel(S.data.today)} ${S.data.today.getFullYear()}</div></div>
+        ${monthSwitch()}
+        <button class="cmd-trigger" data-act="cmd" aria-label="بحث سريع">${ic('search')}<span>دوّر بالسيريال أو العميل أو الصفحة</span><kbd>Ctrl K</kbd></button>
+        <div class="top-actions">
+          ${syncChip()}
+          <button class="icon-btn ai-only" data-act="ai" title="المساعد الذكي" aria-label="المساعد الذكي" style="color:var(--primary)">${ic('spark')}</button>
+          <button class="icon-btn" data-act="theme" title="الوضع الليلي" aria-label="تغيير الوضع">${ic(S.theme==='dark'?'sun':'moon')}</button>
+          <button class="icon-btn" data-act="alerts" title="التنبيهات" aria-label="التنبيهات">${ic('bell')}${al.length?'<span class="dot"></span>':''}</button>
+        </div>
+      </header>
+      ${isTrial()?`<div class="trial-bar">${ic('flag')}<div><b>نوفمبر شهر تجربة.</b> الأوردرات والخزنة اللي هتتسجل فيه هتتمسح يوم 30 بالليل. الأجهزة اللي في الستوك هتفضل، وهتنزل لوحدها "رصيد أول الشهر" في ديسمبر.</div></div>`:''}
+      <main class="content" id="view"></main>
+    </div>
+  </div>`;
+  renderView();
+}
+let lastView = null;
+function renderView(){
+  if(!can(S.view)) S.view = 'dashboard';
+  if(lastView!==S.view) closeDrawer();
+  lastView = S.view;
+  document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active', a.dataset.nav===S.view));
+  const t = document.getElementById('pageTitle'); if(t) t.textContent = TITLE(S.view);
+  const v = document.getElementById('view');
+  v.innerHTML = VIEWS[S.view]();
+  VIEWS_AFTER[S.view]?.();
+  document.getElementById('side')?.classList.remove('open');
+  window.scrollTo(0,0);
+}
+const go = (view, apply) => { apply?.(); if(view===S.view) renderView(); else location.hash = view; };
+
+/* ---------- Shared pieces ---------- */
+const chip = st => `<span class="chip s-${st}">${STATUS[st]?.short || DEV_STATUS[st]}</span>`;
+const emptyBox = (icon, txt) => `<div class="empty">${ic(icon)}<div>${txt}</div></div>`;
+const reviewDot = o => o.reviewed ? `<span class="rv ok" title="الفلوس اتراجعت">${ic('check')}</span>` : `<span class="rv" title="مستني مراجعة الفلوس"></span>`;
+function kpi({label,val,to,suffix='',icon,tone,foot,go:g,spark,alert}){
+  const tag = g ? 'button' : 'div';
+  const v = to!=null ? `<span data-to="${to}">${fmt(to)}</span>${suffix}` : val;
+  return `<${tag} class="kpi ${alert?'kpi-alert':''}" ${g?`data-go="${g}"`:''}>${spark||''}<div class="k-label"><span class="c-${tone}">${ic(icon)}</span>${label}</div>
+    <div class="k-val">${v}</div>${foot?`<div class="k-foot">${foot}</div>`:''}</${tag}>`;
+}
+const kpiStrip = items => `<div class="card kpis">${items.map(kpi).join('')}</div>`;
+function sparkline(vals, color){
+  const W=200,H=34,max=Math.max(...vals,1), step=W/Math.max(vals.length-1,1);
+  const pts = vals.map((v,i)=>`${(i*step).toFixed(1)},${(H-2-(v/max)*(H-8)).toFixed(1)}`).join(' ');
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="direction:ltr"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg>`;
+}
+function countUp(root){
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  root.querySelectorAll('[data-to]').forEach(el=>{ const to = +el.dataset.to, t0 = performance.now(), dur = 900;
+    const tick = now => { const p = Math.min(1,(now-t0)/dur), e = 1-Math.pow(1-p,3); el.textContent = fmt(to*e); if(p<1) requestAnimationFrame(tick); };
+    el.textContent = '0'; requestAnimationFrame(tick); });
+}
+
+/* Sheet-style orders table: one field per column, same order as the orders sheet */
+function ordersTable(list, {compact=false, ship=false}={}){
+  if(!list.length) return S.data.orders.length ? emptyBox('orders','مفيش أوردرات مطابقة') : emptyBox('orders', SYNC.state==='ok' ? 'لسه مفيش أوردرات في الشيت. أول أوردر يتسجل هيظهر هنا بالسيريال.' : 'بيقرأ شيت الأوردرات...');
+  const u = me(), dead = o => o.status==='cancelled'||o.status==='returned';
+  const base = {
+    sn:['S/N',o=>`<span class="mono sn">${esc(o.sn)}</span>`],
+    date:['التاريخ',o=>`<span class="num">${dShort(o.created)}</span>`],
+    model:['الموديل',o=>`<b>${esc(o.model)}</b>`],
+    cpu:['البروسيسور',o=>esc(o.cpu)], ram:['الرام',o=>esc(o.ram)], hard:['الهارد',o=>`<span dir="ltr">${esc(o.hard)}</span>`],
+    price:['سعر البيع',o=>`<b class="num">${fmt(o.price)}</b>`],
+    profit:['الربح',o=>dead(o)?'<span class="muted">—</span>':`<span class="num trend-up">${fmt(o.price-(o.cost||0)-(o.shipCost||0))}</span>`],
+    deposit:['الديبوزت',o=>o.deposit?`<span class="num">${fmt(o.deposit)}</span> <span class="cell-sub">${esc(o.depositMethod||'')}</span>`:'<span class="muted">—</span>'],
+    rest:['الباقي',o=>{ const m=moneyOf(o); return m.rest?`<span class="num">${fmt(m.rest)}</span> <span class="cell-sub">${o.cod?'تحصيل شركة الشحن':esc(o.remMethod||'')}</span>`:'<span class="muted">—</span>'; }],
+    mstate:['حالة الفلوس',o=>MSTATE_CHIP(moneyOf(o))],
+    rep:['السيلز',o=>esc(o.rep)], customer:['اسم العميل',o=>esc(o.customer)], phone:['التليفون',o=>`<span class="num">${esc(o.phone)}</span>`],
+    delivery:['التسليم',o=>esc(o.delivery)], address:['العنوان',o=>esc(o.address)],
+    status:['الحالة',o=>chip(o.status)],
+    days:['من يوم الأوردر',o=>['confirmed','shipping'].includes(o.status)?`<span class="num ${o.status==='shipping'&&daysSince(o.created)>SHIP_LATE_DAYS?'c-red':''}">${daysSince(o.created)} يوم</span>`:'<span class="muted">—</span>'],
+  };
+  let keys;
+  if(compact) keys = ['sn','model','customer','price','mstate','status'];
+  else if(ship) keys = ['sn','status','days','model','customer','phone','delivery','address','rest','rep','date'];
+  else keys = ['sn','date','model','cpu','ram','hard','price', ...(u.cost?['profit']:[]), 'deposit','rest','mstate','rep','customer','phone','delivery','address','status'];
+  const cols = keys.map(k=>base[k]);
+  return `<div class="table-wrap"><table class="sheet">
+    <thead><tr><th class="rvc" title="مراجعة الفلوس"></th><th class="rn">#</th>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr></thead>
+    <tbody>${list.map((o,i)=>`<tr class="clickable ${o.reviewed?'':'unrev'}" data-order="${o.id}"><td class="rvc">${reviewDot(o)}</td><td class="rn num">${i+1}</td>${cols.map(c=>`<td>${c[1](o)}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table></div>`;
+}
+
+/* ---------- Views ---------- */
+const VIEWS = {}, VIEWS_AFTER = {};
+
+VIEWS.dashboard = () => {
+  const s = stats(), u = me(), {orders, today} = S.data;
+  const greet = new Date().getHours() < 12 ? 'صباح الخير' : 'مساء الخير';
+  const last = [...orders].sort((a,b)=>b.created-a.created).slice(0,6);
+  const daily = Array.from({length:Math.max(P.elapsed,2)},(_,i)=>orders.filter(o=>o.created.getDate()===i+1 && o.created.getMonth()===P.m && o.status!=='cancelled').reduce((a,o)=>a+o.price,0));
+  const todayTotal = s.todayOrders.reduce((a,o)=>a+o.price,0);
+  const stages = [
+    {who:'المبيعات', icon:'orders', lbl:'أوردرات النهارده', n:s.todayOrders.length, view:'orders'},
+    {who:'الفلوس', icon:'cash', lbl:'مستني يخرج', n:s.by('confirmed'), view:'shipping', ship:'confirmed'},
+    {who:'الشحن', icon:'truck', lbl:'في الشحن دلوقتي', n:s.by('shipping'), view:'shipping', ship:'shipping', hot:s.by('shipping')>0},
+    {who:'العميل', lbl:'اتسلموا الشهر ده', n:s.by('delivered'), view:'shipping', ship:'delivered', done:true},
+  ];
+  const kpis = [
+    {label:'مبيعات الشهر', to:s.revenue, suffix:'<small>ج.م</small>', icon:'trend', tone:'blue', go:'orders', foot:`من أول ${P.monthName}`, spark:daily.some(v=>v)?sparkline(daily,'var(--primary)'):''},
+    ...(u.cost?[{label:'صافي الربح', to:s.profit, suffix:'<small>ج.م</small>', icon:'cash', tone:'green', foot:'بعد مصاريف الشحن اللي علينا'}]:[]),
+    ...(u.review?[{label:'مستني مراجعة الفلوس', to:s.toReview.length, suffix:'<small>أوردر</small>', icon:'flag', tone:'red', go:'orders', alert:s.toReview.length>0, foot:'علّم عليهم بعد ما تتأكد'}]:[]),
+    ...(can('money')?[{label:'عند شركة الشحن', to:s.atCourier, suffix:'<small>ج.م</small>', icon:'truck', tone:'sky', go:'money', foot:'اتحصلت ولسه ماتوردتش'}]:[]),
+    {label:'الستوك المتاح', to:s.available.length, suffix:'<small>جهاز</small>', icon:'box', tone:'sky', go:'stock', foot:`المفروض حسب الحركة ${s.expected}`},
+  ];
+  const al = alerts();
+  return `
+  <section class="ops" aria-label="رحلة الأوردرات">
+    <div><div class="greet">${greet}</div><h2 class="hello">${nm(u.name)}</h2><div class="date">${DAYS[today.getDay()]} ${dLabel(today)} ${today.getFullYear()}</div>
+      ${P.started?'':`<div class="start-note">${ic('clock')} السيستم هيبدأ يحسب من يوم 1 ${P.monthName}${P.daysLeft?`، فاضل ${P.daysLeft} يوم`:''}</div>`}
+      <div class="clock" id="clock"></div></div>
+    <div class="flow"><div class="flow-line"><i id="flowFill" style="--p:${S.introDone?1:0}"></i></div>
+      ${stages.map(st=>`<button class="stage ${st.hot?'hot':''} ${st.done?'done':''}" data-go="${st.view}" ${st.ship?`data-shipf="${st.ship}"`:''}>
+        <span class="node">${st.done?ic('check'):ic(st.icon)}</span><span class="cnt" data-to="${st.n}">${st.n}</span><span class="lbl">${st.lbl}</span><span class="who">${st.who}</span></button>`).join('')}
+    </div>
+  </section>
+  <div class="mt">${kpiStrip(kpis)}</div>
+  <div class="grid g-1-2 mt">
+    <div class="card"><div class="card-h"><h3>محتاج تتصرف فيه</h3>${al.length?`<span class="chip plain tone-red">${al.length}</span>`:''}</div><div class="card-b">${alertList(al)}</div></div>
+    <div class="card"><div class="card-h"><h3>المبيعات اليومية</h3><span class="hint">${P.monthName} ${P.y}، دوس على أي يوم تشوف أوردراته</span></div><div class="card-b"><div class="chart-box" id="salesChart"></div></div></div>
+  </div>
+  <div class="grid g-2-1 mt">
+    <div class="card"><div class="card-h"><h3>آخر الأوردرات</h3><div class="right"><button class="btn btn-ghost btn-sm" data-go="orders">كل الأوردرات</button></div></div><div class="card-b" style="padding:12px 0 0">${ordersTable(last,{compact:true})}</div></div>
+    <div class="card"><div class="card-h"><h3>أفضل السيلز</h3><div class="right">${can('sales')?`<button class="btn btn-ghost btn-sm" data-go="sales">التفاصيل</button>`:''}</div></div><div class="card-b">${topReps(5)}</div></div>
+  </div>`;
+};
+VIEWS_AFTER.dashboard = () => {
+  drawSalesChart(); startClock();
+  if(!S.introDone){
+    S.introDone = true;
+    const v = document.getElementById('view'); v.classList.add('intro'); setTimeout(()=>v.classList.remove('intro'), 1200);
+    countUp(v);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById('flowFill')?.style.setProperty('--p',1)));
+  }
+};
+function alertList(al){
+  if(!al.length) return emptyBox('check', S.data.orders.length ? 'كله تمام، مفيش حاجة مستنياك.' : 'التنبيهات هتظهر هنا: أوردرات مستنية مراجعة، أجهزة متأخرة في الشحن، فلوس عند شركة الشحن، أو أي غلط في الشيتات.');
+  return `<div class="alerts">${al.map((a,i)=>`<button class="al al-${a.level}" data-alert="${i}"><span class="al-ic">${ic(a.icon)}</span><span class="al-t">${a.t}</span><b class="num">${a.n}</b>${ic('arrowL')}</button>`).join('')}</div>`;
+}
+let clockTimer = null;
+function startClock(){
+  clearInterval(clockTimer);
+  const tick = () => { const el = document.getElementById('clock'); if(!el){ clearInterval(clockTimer); return; }
+    const d = new Date(); el.innerHTML = `${hhmm(d)}<small>:${String(d.getSeconds()).padStart(2,'0')}</small>`; };
+  tick(); clockTimer = setInterval(tick, 1000);
+}
+function drawSalesChart(){
+  const {orders} = S.data, box = document.getElementById('salesChart'); if(!box) return;
+  const nDays = P.daysInMonth, days = Array.from({length:nDays},(_,i)=>i+1), todayIdx = P.elapsed-1;
+  const per = days.map(d=>orders.filter(o=>o.created.getDate()===d && o.created.getMonth()===P.m && o.status!=='cancelled'));
+  const vals = per.map(l=>l.reduce((s,o)=>s+o.price,0));
+  if(!vals.some(v=>v)){ box.innerHTML = emptyBox('trend', P.started ? 'لسه مفيش مبيعات الشهر ده. أول أوردر يتسجل في الشيت هيظهر هنا.' : `الرسم هيبدأ يتملي من يوم 1 ${P.monthName}.`); return; }
+  const W=720,H=250,pl=40,pb=30,pt=12, max = Math.ceil(Math.max(...vals)/10000)*10000 || 10000;
+  const bw = (W-pl-6)/days.length, y = v => H-pb-(v/max)*(H-pb-pt);
+  let g = '';
+  for(let k=0;k<=4;k++){ const v=max*k/4; g+=`<line x1="${pl}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--border-2)" ${k?'stroke-dasharray="3 4"':''}/><text x="${pl-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--faint)" font-family="Alexandria">${v/1000}k</text>`; }
+  const bars = vals.map((v,i)=>{ const x=pl+i*bw+bw*.18, h=Math.max(H-pb-y(v),v?3:0), isT=i===todayIdx;
+    return `<g class="bar" data-day="${days[i]}" data-v="${v}" data-n="${per[i].length}" data-cx="${x+bw*.32}" data-top="${y(v)}">
+      <rect x="${pl+i*bw}" y="${pt}" width="${bw}" height="${H-pt-pb}" fill="transparent"/>
+      <rect x="${x}" y="${H-pb-h}" width="${bw*.64}" height="${h}" rx="4" fill="${isT?'var(--primary)':'color-mix(in srgb,var(--primary) 38%,transparent)'}"/>
+      ${nDays<=31 && (i%2===0||isT)?`<text x="${x+bw*.32}" y="${H-9}" text-anchor="middle" font-size="11" fill="${isT?'var(--primary)':'var(--faint)'}" font-family="Alexandria" font-weight="${isT?600:400}">${days[i]}</text>`:''}</g>`; }).join('');
+  box.innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${g}${bars}</svg><div class="tip" id="tip"></div>`;
+  const svg = box.querySelector('svg'), tip = box.querySelector('#tip');
+  box.querySelectorAll('.bar').forEach(b=>{
+    b.addEventListener('pointerenter', ()=>{ const r = svg.getBoundingClientRect(), sx = r.width/W, sy = r.height/H;
+      tip.innerHTML = `<b>${fmt(+b.dataset.v)} ج.م</b>${b.dataset.day} ${P.monthName}، ${b.dataset.n} أوردر`;
+      tip.style.left = (+b.dataset.cx*sx)+'px'; tip.style.top = (+b.dataset.top*sy)+'px'; tip.classList.add('show'); });
+    b.addEventListener('pointerleave', ()=>tip.classList.remove('show'));
+    b.addEventListener('click', ()=>go('orders', ()=>{ S.orderFilter = {q:'', status:'all', day:+b.dataset.day, review:false}; }));
+  });
+}
+
+/* Sales performance (from the السيلز column) */
+function repStats(){
+  const map = {};
+  S.data.orders.forEach(o=>{ const k = o.rep || 'من غير اسم'; const r = map[k] = map[k] || {rep:k, n:0, revenue:0, delivered:0, back:0, profit:0};
+    if(o.status==='cancelled' || o.status==='returned'){ r.back++; return; }
+    r.n++; r.revenue += o.price; r.profit += o.price-(o.cost||0); if(o.status==='delivered') r.delivered++; });
+  return Object.values(map).sort((a,b)=>b.revenue-a.revenue);
+}
+function topReps(n){
+  const list = repStats().filter(r=>r.n).slice(0,n); if(!list.length) return emptyBox('sales','ترتيب السيلز هيظهر هنا من عمود السيلز في شيت الأوردرات.');
+  const max = list[0].revenue || 1;
+  return `<div class="reps">${list.map((r,i)=>`<div class="rep"><span class="rep-n num">${i+1}</span><div class="rep-b"><div class="rep-h"><b>${esc(r.rep)}</b><span class="num">${fmt(r.revenue)}</span></div><div class="b-track"><i style="width:${r.revenue/max*100}%"></i></div><small>${r.n} جهاز</small></div></div>`).join('')}</div>`;
+}
+VIEWS.sales = () => {
+  const list = repStats(), u = me();
+  const tot = list.reduce((a,r)=>a+r.revenue,0);
+  return `
+  <div class="hero"><div><h2>أداء السيلز</h2><p>من عمود السيلز في شيت الأوردرات، لشهر ${P.monthName}. الملغي والمرتجع مش محسوبين في المبيعات.</p></div></div>
+  <div class="grid g-1-2">
+    <div class="card"><div class="card-h"><h3>الترتيب</h3></div><div class="card-b">${topReps(20)}</div></div>
+    <div class="card"><div class="table-wrap">${list.length?`<table class="sheet"><thead><tr><th class="rn">#</th><th>السيلز</th><th>أجهزة اتباعت</th><th>اتسلم</th><th>المبيعات</th><th>نسبته من المبيعات</th><th>متوسط سعر الجهاز</th>${u.cost?'<th>الربح</th>':''}<th>ملغي أو مرتجع</th></tr></thead><tbody>
+      ${list.map((r,i)=>`<tr><td class="rn num">${i+1}</td><td><b>${esc(r.rep)}</b></td><td class="num">${r.n}</td><td class="num">${r.delivered}</td><td class="num"><b>${fmt(r.revenue)}</b></td><td class="num">${tot?Math.round(r.revenue/tot*100):0}%</td><td class="num">${fmt(r.n?r.revenue/r.n:0)}</td>${u.cost?`<td class="num trend-up">${fmt(r.profit)}</td>`:''}<td class="num ${r.back?'c-red':'muted'}">${r.back}</td></tr>`).join('')}
+    </tbody></table>`:emptyBox('sales','لسه مفيش مبيعات الشهر ده.')}</div></div>
+  </div>`;
+};
+
+/* Orders */
+VIEWS.orders = () => {
+  const f = S.orderFilter, {orders} = S.data, u = me();
+  const counts = Object.fromEntries(Object.keys(STATUS).map(k=>[k, orders.filter(o=>o.status===k).length]));
+  return `
+  <div class="hero"><div><h2>الأوردرات</h2><p>كل أوردر من لحظة ما يتأكد لحد ما العميل يستلم. ${u.review?'العلامة الحمرا معناها إن الفلوس لسه متراجعتش، ودوس على الأوردر عشان تراجعه.':''}</p></div></div>
+  <div class="card">
+    <div class="toolbar">
+      <div class="tabs">
+        <button data-st="all" class="${f.status==='all'&&!f.review?'on':''}">الكل <span>${orders.length}</span></button>
+        ${u.review?`<button data-st="review" class="${f.review?'on':''}"><i class="rv"></i> مستني مراجعة <span>${stats().toReview.length}</span></button>`:''}
+        ${Object.keys(STATUS).map(k=>`<button data-st="${k}" class="${f.status===k&&!f.review?'on':''}">${STATUS[k].short} <span>${counts[k]}</span></button>`).join('')}
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="search">${ic('search')}<input id="oq" placeholder="دوّر بالسيريال، اسم العميل، التليفون، الموديل، أو السيلز" value="${esc(f.q)}"></div>
+      ${f.day?`<span class="filter-chip">يوم ${f.day} ${P.monthName}<button data-act="clearDay" aria-label="إلغاء فلتر اليوم">${ic('x')}</button></span>`:''}
+    </div>
+    <div id="ordersList">${ordersTable(filterOrders())}</div>
+  </div>`;
+};
+function filterOrders(){
+  const f = S.orderFilter, q = f.q.trim().toLowerCase();
+  return [...S.data.orders].sort((a,b)=>b.created-a.created).filter(o=>
+    (f.review ? !o.reviewed && !(o.status==='cancelled' && !o.deposit) : (f.status==='all'||o.status===f.status)) &&
+    (!f.day || (o.created.getDate()===f.day && o.created.getMonth()===P.m)) &&
+    (!q || [o.sn,o.customer,o.phone,o.model,o.rep].join(' ').toLowerCase().includes(q)));
+}
+VIEWS_AFTER.orders = () => {
+  document.getElementById('oq').oninput = e => { S.orderFilter.q = e.target.value; document.getElementById('ordersList').innerHTML = ordersTable(filterOrders()); };
+};
+
+function openOrder(id){
+  const o = (S.all||S.data).orders.find(x=>x.id===id); if(!o) return;
+  const u = me(), m = moneyOf(o), dev = S.data.devices.find(d=>d.sn===o.sn);
+  const txs = (S.all||S.data).tx.filter(t=>t.sn===o.sn);
+  const steps = [
+    {t:'الأوردر اتأكد', d:o.created, done:true},
+    {t:isPickup(o)?'اتجهز للاستلام':'خرج للشحن', done:['shipping','delivered','returned'].includes(o.status)},
+    {t:'العميل استلم', done:['delivered','returned'].includes(o.status)},
+    {t:'الفلوس اتراجعت', d:o.reviewedAt, done:!!o.reviewed, by:o.reviewedBy},
+  ];
+  openDrawer(`
+    <div class="drawer-h"><div><h3>${esc(o.model)}</h3><div class="cell-sub"><span class="mono">S/N ${esc(o.sn)}</span>، ${dLabel(o.created)}، ${esc(o.rep)}</div></div>${chip(o.status)}<button class="icon-btn" data-act="close" aria-label="إغلاق">${ic('x')}</button></div>
+    <div class="drawer-b">
+      ${o.reviewed?`<div class="note" style="background:var(--green-soft);color:var(--green)">${ic('check')}<div>الفلوس اتراجعت${o.reviewedBy?` بواسطة ${nm(o.reviewedBy)}`:''}${o.reviewedAt?`، ${dLabel(o.reviewedAt)}`:''}.</div></div>`
+        :`<div class="note" style="background:var(--red-soft);color:var(--red)">${ic('flag')}<div>الأوردر ده لسه متراجعش. اتأكد إن كل جنيه في الحسبة تحت وصل فعلاً.</div></div>`}
+
+      <div class="sec-title">الفلوس</div>
+      <div class="ledger">
+        <div><span>سعر البيع</span><b class="num">${fmt(o.price)}</b></div>
+        <div><span>الديبوزت ${o.deposit?`<small>(${esc(o.depositMethod||'')})</small>`:''}</span><b class="num">${o.deposit?fmt(m.deposit):'—'}</b></div>
+        <div class="tot"><span>الباقي ${m.rest?`<small>(${o.cod?'تحصيل شركة الشحن':esc(o.remMethod||'')})</small>`:''}</span><b class="num">${fmt(m.rest)}</b></div>
+        ${o.shipCost?`<div><span>مصاريف شحن علينا</span><b class="num">${fmt(o.shipCost)}</b></div>`:''}
+        ${u.cost?`<div><span>سعر الشرا</span><b class="num">${dev?fmt(dev.cost):'—'}</b></div><div><span>الربح</span><b class="num trend-up">${fmt(o.price-(o.cost||0)-(o.shipCost||0))}</b></div>`:''}
+      </div>
+      <div class="row-flex" style="margin-top:12px">${MSTATE_CHIP(m)}</div>
+      ${can('money')?`<div class="sec-title">في شيت الخزنة بنفس السيريال</div>
+      ${txs.length?`<div class="mini-tx">${txs.map(t=>`<div><span>${dLabel(t.t)}، ${esc(t.cat)} <small>(${esc(t.account)})</small></span><b class="num ${t.type==='in'?'amt-in':'amt-out'}">${t.type==='in'?'+':'−'}${fmt(t.amount)}</b></div>`).join('')}</div>`:`<div class="muted" style="font-size:13px">مفيش حركات متسجلة بالسيريال ده.</div>`}
+      ${m.mismatch?`<div class="note warn" style="margin-top:10px">${ic('alert')}<div>المفروض يكون متسجل في الخزنة ${moneyTxt(m.expectedDirect)} (ديبوزت + باقي اتحصل مباشرة)، والمتسجل ${moneyTxt(m.inTreasury)}.</div></div>`:''}`:''}
+
+      <div class="sec-title">الجهاز والعميل</div>
+      <dl class="kv"><dt>المواصفات</dt><dd>${esc(o.cpu)}، ${esc(o.ram)}، <span dir="ltr">${esc(o.hard)}</span></dd><dt>العميل</dt><dd>${esc(o.customer)}</dd><dt>التليفون</dt><dd class="num">${esc(o.phone)}</dd><dt>التسليم</dt><dd>${esc(o.delivery)}، ${esc(o.address)}</dd>${o.notes?`<dt>ملاحظات</dt><dd>${esc(o.notes)}</dd>`:''}</dl>
+
+      <div class="sec-title">المراحل</div>
+      <div class="timeline">${o.status==='cancelled'?`<div class="tl done"><b>الأوردر اتأكد</b><small>${dLabel(o.created)}</small></div><div class="tl"><b style="color:var(--red)">اتلغى</b></div>`:
+        steps.map(s=>`<div class="tl ${s.done?'done':'pending'}"><b>${s.t}</b>${s.d&&s.done?`<small>${dLabel(s.d)}${s.by?`، ${nm(s.by)}`:''}</small>`:''}</div>`).join('')}</div>
+    </div>
+    <div class="drawer-f" style="border-top:0;padding-top:0"><a class="btn btn-ghost btn-sm" href="${sheetLink(FILES.ops,'orders',o.row)}" target="_blank" rel="noopener">${ic('sheet')} افتح سطر الأوردر في الشيت</a>
+      ${txs.length && FILES.acc && (me().cost||can('money')) ? `<a class="btn btn-ghost btn-sm" href="${sheetLink(FILES.acc,'tx',txs[0].row)}" target="_blank" rel="noopener">${ic('wallet')} افتح حركته في الخزنة</a>`:''}</div>
+    ${u.review?`<div class="drawer-f">${o.reviewed
+      ? `<button class="btn btn-ghost" data-unreview="${o.id}">${ic('return')} رجّعه لمستني مراجعة</button>`
+      : `<button class="btn btn-primary" data-review="${o.id}">${ic('check')} الفلوس تمام، اتراجعت</button>`}</div>`:''}
+  `);
+}
+async function setReviewed(id, val){
+  const o = (S.all||S.data).orders.find(x=>x.id===id); if(!o) return;
+  const btn = document.querySelector(`[data-review="${id}"],[data-unreview="${id}"]`);
+  if(btn){ btn.disabled = true; btn.innerHTML = `${ic('refresh','spin')} بيكتب في الشيت...`; }
+  try{
+    const r = await api('review', {row:o.row, sn:o.sn, val});
+    o.reviewed = val; Object.assign(o, parseStamp(r.stamp||''));
+    toast(val ? `${o.model} اتعلّم في الشيت إن فلوسه اتراجعت` : `${o.model} رجع لمستني مراجعة في الشيت`);
+    closeDrawer(); renderShell();
+  }catch(e){
+    if(e.code==='unauthorized') return sessionExpired();
+    if(e.code==='moved'){ toast('الشيت اتغيّر من آخر قراءة. حدّثت البيانات، جرّب تاني.', true); closeDrawer(); return reloadData(false, true); }
+    const ambiguous = ['network','timeout'].includes(e.code);
+    toast(ambiguous ? 'مش متأكد إن العلامة اتكتبت. هقرأ الشيت تاني وشوف.' : (e.message || 'مقدرتش أكتب في الشيت.'), true);
+    if(btn){ btn.disabled = false; btn.innerHTML = val ? `${ic('check')} الفلوس تمام، اتراجعت` : `${ic('return')} رجّعه لمستني مراجعة`; }
+    if(ambiguous){ closeDrawer(); reloadData(false, true); }
+  }
+}
+
+/* Shipping */
+const SHIP_TABS = [
+  ['active','لسه ماوصلتش', o=>['confirmed','shipping'].includes(o.status)],
+  ['confirmed','مستني يخرج', o=>o.status==='confirmed'],
+  ['shipping','في الشحن', o=>o.status==='shipping'],
+  ['delivered','اتسلم', o=>o.status==='delivered'],
+  ['back','مرتجع أو ملغي', o=>['returned','cancelled'].includes(o.status)],
+];
+VIEWS.shipping = () => {
+  const {orders} = S.data, s = stats();
+  const tab = SHIP_TABS.find(t=>t[0]===S.shipFilter) || SHIP_TABS[0];
+  const list = orders.filter(tab[2]).sort((a,b)=>b.created-a.created);
+  return `
+  <div class="hero"><div><h2>الشحن والتسليم</h2><p>كل جهاز خرج فين، بالسيريال. الحالة بتتحدث من عمود "الحالة" في تاب الأوردرات.</p></div></div>
+  ${kpiStrip([
+    {label:'مستني يخرج', val:s.by('confirmed'), icon:'orders', tone:'blue'},
+    {label:'في الشحن دلوقتي', val:s.by('shipping'), icon:'truck', tone:'amber'},
+    {label:`في الشحن أكتر من ${SHIP_LATE_DAYS} أيام`, val:orders.filter(o=>o.status==='shipping'&&daysSince(o.created)>SHIP_LATE_DAYS).length, icon:'clock', tone:'red'},
+    {label:'اتسلم', val:s.by('delivered'), icon:'check', tone:'green'},
+    {label:'مرتجع أو ملغي', val:s.by('returned')+s.by('cancelled'), icon:'return', tone:'violet'},
+  ])}
+  <div class="card mt">
+    <div class="toolbar"><div class="tabs">${SHIP_TABS.map(t=>`<button data-ship="${t[0]}" class="${t===tab?'on':''}">${t[1]} <span>${orders.filter(t[2]).length}</span></button>`).join('')}</div></div>
+    ${ordersTable(list,{ship:true})}
+  </div>`;
+};
+
+/* Stock */
+VIEWS.stock = () => {
+  const s = stats(), f = S.stockFilter;
+  const expectedList = S.data.devices.filter(d=>d.status==='available');
+  const found = expectedList.filter(d=>S.counted.has(d.sn)).length, missing = expectedList.length - found;
+  const pct = expectedList.length ? found/expectedList.length*100 : 0;
+  return `
+  <div class="hero"><div><h2>الستوك والجرد</h2><p>رصيد أول الشهر ثابت وكل حركة بتتحسب تلقائي. العلامة الحمرا على جهاز اتباع معناها إن فلوسه لسه متراجعتش.</p></div></div>
+  <div class="card"><div class="card-h"><h3>معادلة الستوك لشهر ${P.monthName}</h3><span class="hint">من شيت الستوك وشيت الأوردرات</span></div>
+    <div class="card-b">
+      <div class="recon">
+        <div><small>رصيد أول الشهر</small><b class="num">${s.opening}</b><span class="op">+</span></div>
+        <div><small>وارد جديد</small><b class="num c-sky">${s.incoming}</b><span class="op">−</span></div>
+        <div><small>خرج في أوردرات</small><b class="num c-amber">${s.out}</b><span class="op">+</span></div>
+        <div><small>مرتجعات رجعت</small><b class="num c-violet">${s.returns}</b><span class="op">=</span></div>
+        <div><small>المفروض يكون موجود</small><b class="num c-blue">${s.expected}</b></div>
+      </div>
+      ${!expectedList.length ? `<div class="result" style="background:var(--surface-2)">${ic('box')}<div>الجرد هيشتغل أول ما أجهزة الستوك تتسحب من الشيت.</div></div>` :
+      `<div class="result ${missing===0&&found?'tone-green':'tone-amber'}">
+        ${ic(missing===0&&found?'check':'box')}
+        <div style="flex:1;min-width:200px"><div class="big num">${found} / ${expectedList.length}</div><div>${found===0?'ابدأ الجرد: علّم على كل جهاز موجود فعلاً في المخزن من الجدول تحت.':missing===0?'الجرد مظبوط، كل الأجهزة موجودة.':`لسه ${missing} جهاز متعلّمش عليهم. راجعهم بالسيريال.`}</div>
+          <div class="progress" style="margin-top:10px"><i style="width:${pct}%"></i></div></div>
+        <button class="btn btn-ghost btn-sm" data-act="countReset">${ic('refresh')} ابدأ الجرد من الأول</button>
+      </div>`}
+    </div></div>
+  <div class="card mt">
+    <div class="toolbar">
+      <div class="search">${ic('search')}<input id="sq" placeholder="دوّر بالسيريال أو الموديل" value="${esc(f.q)}"></div>
+      <div class="tabs">${[['all','الكل'],['available','متاح'],['reserved','محجوز'],['shipping','في الشحن'],['sold','اتباع']].map(([k,t])=>`<button data-sst="${k}" class="${f.status===k?'on':''}">${t} <span>${k==='all'?S.data.devices.length:S.data.devices.filter(d=>d.status===k).length}</span></button>`).join('')}</div>
+    </div>
+    <div id="stockList">${stockTable()}</div>
+  </div>`;
+};
+function stockTable(){
+  const f = S.stockFilter, q = f.q.trim().toLowerCase(), u = me();
+  const list = S.data.devices.filter(d=>(f.status==='all'||d.status===f.status) && (!q || (d.sn+' '+d.model+' '+d.cpu).toLowerCase().includes(q)));
+  if(!list.length) return S.data.devices.length ? emptyBox('box','مفيش أجهزة مطابقة') : emptyBox('box', SYNC.state==='ok' ? `لسه مفيش أجهزة في شيت الستوك. رصيد أول ${P.monthName} والوارد هيظهروا هنا بالسيريال أول ما يتسجلوا.` : 'بيقرأ شيت الستوك...');
+  return `<div class="table-wrap"><table class="sheet"><thead><tr><th class="rvc"></th><th>جرد</th><th>S/N</th><th>الموديل</th><th>البروسيسور</th><th>الرام</th><th>الهارد</th><th>كارت الشاشة</th><th>الحالة الخارجية</th><th>الشاحن</th>${u.cost?'<th>سعر الشرا</th>':''}<th>المصدر</th><th>تاريخ الدخول</th><th>الحالة</th></tr></thead><tbody>
+  ${list.map(d=>{ const o = d.order; return `<tr class="${o?'clickable':''} ${o&&!o.reviewed?'unrev':''}" ${o?`data-order="${o.id}"`:''}>
+    <td class="rvc">${o?reviewDot(o):''}</td>
+    <td>${d.status==='available'?`<button class="check ${S.counted.has(d.sn)?'on':''}" data-count="${esc(d.sn)}" aria-label="موجود">${S.counted.has(d.sn)?ic('check'):''}</button>`:'<span class="muted">—</span>'}</td>
+    <td><span class="mono sn">${esc(d.sn)}</span></td><td><b>${esc(d.model)}</b></td><td>${esc(d.cpu)}</td><td>${esc(d.ram)}</td><td dir="ltr" style="text-align:right">${esc(d.hard)}</td><td dir="ltr" style="text-align:right">${esc(d.gpu||'')}</td><td>${esc(d.condition||'')}</td><td>${esc(d.adapter||'')}</td>
+    ${u.cost?`<td class="num">${fmt(d.cost)}</td>`:''}
+    <td>${esc(d.source)}</td><td class="num">${dShort(d.added)}</td>
+    <td>${chip(d.status)}${d.returned?' <span class="chip s-returned plain">مرتجع</span>':''}</td></tr>`; }).join('')}
+  </tbody></table></div>`;
+}
+VIEWS_AFTER.stock = () => { document.getElementById('sq').oninput = e => { S.stockFilter.q = e.target.value; document.getElementById('stockList').innerHTML = stockTable(); }; };
+
+/* Money */
+VIEWS.money = () => {
+  const s = stats(), {orders, tx} = S.data, f = S.moneyFilter;
+  const dep = orders.filter(o=>moneyOf(o).state==='pending');
+  const cour = orders.filter(o=>moneyOf(o).state==='courier');
+  const refunds = orders.filter(o=>moneyOf(o).state==='refund');
+  const outs = {}; tx.filter(t=>t.type==='out').forEach(t=>outs[t.cat]=(outs[t.cat]||0)+t.amount);
+  const catList = Object.entries(outs).sort((a,b)=>b[1]-a[1]), cmax = catList[0]?.[1]||1;
+  const accIcon = {'كاش':'cash','إنستاباي':'send','فودافون كاش':'wallet','فيزا / بنك':'bank'};
+  const txl = [...tx].reverse().filter(t=>(f.account==='all'||t.account===f.account) && (f.type==='all'||t.type===f.type));
+  const smallTable = (list, cols, empty) => list.length ? `<div class="table-wrap"><table class="sheet"><thead><tr><th class="rvc"></th>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${list.map(o=>`<tr class="clickable ${o.reviewed?'':'unrev'}" data-order="${o.id}"><td class="rvc">${reviewDot(o)}</td>${cols.map(c=>`<td>${c[1](o)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : emptyBox('check', empty);
+  return `
+  <div class="hero"><div><h2>الفلوس والخزنة</h2><p>كل جنيه في مكانه: في أنهي حساب، ولسه عند مين.</p></div><button class="btn btn-ghost btn-sm" data-act="flow">${ic('info')} إزاي الفلوس بتمشي؟</button></div>
+  <div class="flow-help" id="flowHelp" ${S.showFlow?'':'hidden'}>
+    <div class="fh-step"><b>1. الديبوزت أو المبلغ كله</b><p>بيتكتب في الأوردر (الديبوزت وطريقته)، وبيتسجل في شيت الخزنة كـ"ديبوزت" على الحساب اللي دخل فيه، بنفس السيريال.</p></div>
+    <div class="fh-step"><b>2. الباقي</b><p>لو العميل دفعه بنفسه (كاش، إنستاباي، فيزا...): بيتسجل في الخزنة "باقي أوردر" بنفس السيريال. لو "تحصيل شركة الشحن" متعلّم: شركة الشحن بتحصله ويفضل عندها.</p></div>
+    <div class="fh-step"><b>3. توريد شركة الشحن</b><p>لما شركة الشحن تحوّل الفلوس: بتتسجل في تاب الخزنة "توريد شركة الشحن" بالمبلغ اللي وصل. السيستم بيطرحه من اللي عندها لوحده.</p></div>
+    <div class="fh-step"><b>4. المراجعة</b><p>بعد ما تتأكد إن كل ده وصل، افتح الأوردر ودوس "الفلوس تمام". العلامة الحمرا بتختفي.</p></div>
+  </div>
+  <div class="accs">
+    ${ACCOUNTS.map(a=>`<button class="acc ${f.account===a?'on':''}" data-acc="${a}"><span class="acc-ic">${ic(accIcon[a])}</span><span class="acc-l">${a}</span><b class="num">${fmt(s.accounts[a])}</b></button>`).join('')}
+    <div class="acc acc-total"><span class="acc-l">إجمالي اللي في إيدنا</span><b class="num">${fmt(s.balance)}</b><small>ج.م</small></div>
+  </div>
+  <div class="accs accs-2">
+    <div class="acc acc-soft"><span class="acc-ic tone-sky">${ic('truck')}</span><span class="acc-l">عند شركة الشحن</span><b class="num">${fmt(s.atCourier)}</b><small>اتحصل ${fmt(s.courierCollected)} من العملاء، واتورد ${fmt(s.courierRemitted)}</small></div>
+    <div class="acc acc-soft"><span class="acc-ic tone-amber">${ic('user')}</span><span class="acc-l">باقي عند العملاء</span><b class="num">${fmt(s.pendingRest)}</b><small>باقي الأوردرات اللي لسه ماتسلمتش</small></div>
+  </div>
+  <div class="grid g-1-1 mt">
+    <div class="card"><div class="card-h"><h3>ديبوزتات باقيها لسه</h3><span class="hint">${dep.length} أوردر</span></div><div class="card-b" style="padding:12px 0 0">
+      ${smallTable(dep,[['S/N',o=>`<span class="mono sn">${esc(o.sn)}</span>`],['العميل',o=>esc(o.customer)],['الديبوزت',o=>`<span class="num">${fmt(o.deposit)}</span>`],['الباقي',o=>`<b class="num">${fmt(moneyOf(o).rest)}</b>`],['هيتدفع',o=>o.cod?'تحصيل شركة الشحن':esc(o.remMethod||'')]],'مفيش ديبوزتات معلقة.')}</div></div>
+    <div class="card"><div class="card-h"><h3>اتحصلت عن طريق شركة الشحن</h3><span class="hint">${cour.length} أوردر، اتورد منهم ${fmt(s.courierRemitted)}</span></div><div class="card-b" style="padding:12px 0 0">
+      ${smallTable(cour,[['S/N',o=>`<span class="mono sn">${esc(o.sn)}</span>`],['العميل',o=>esc(o.customer)],['المبلغ',o=>`<b class="num">${fmt(moneyOf(o).rest)}</b>`],['تاريخ الأوردر',o=>`<span class="num">${dShort(o.created)}</span>`]],'مفيش أوردرات تحصيل اتسلمت لسه.')}</div></div>
+  </div>
+  ${refunds.length?`<div class="card mt"><div class="card-h"><h3>ملغي أو مرتجع وعليه فلوس</h3><span class="hint">اتأكد إن الفلوس رجعت للعميل واتسجلت "مرتجع لعميل"</span></div><div class="card-b" style="padding:12px 0 0">${smallTable(refunds,[['S/N',o=>`<span class="mono sn">${esc(o.sn)}</span>`],['العميل',o=>esc(o.customer)],['الحالة',o=>chip(o.status)],['اللي اتدفع',o=>`<span class="num">${fmt(o.status==='cancelled'?o.deposit:o.price)}</span>`]],'')}</div></div>`:''}
+  <div class="grid g-2-1 mt">
+    <div class="card">
+      <div class="toolbar"><div class="tabs">${[['all','كل الحركات'],['in','دخل'],['out','خرج']].map(([k,t])=>`<button data-mtype="${k}" class="${f.type===k?'on':''}">${t}</button>`).join('')}</div>
+        ${f.account!=='all'?`<span class="filter-chip">${f.account}<button data-acc="all" aria-label="كل الحسابات">${ic('x')}</button></span>`:''}</div>
+      <div class="table-wrap"><table class="sheet"><thead><tr><th>التاريخ</th><th>النوع</th><th>الحساب</th><th>البند</th><th>S/N</th><th>المبلغ</th><th>المسؤول</th><th>ملاحظات</th><th></th></tr></thead><tbody>
+      ${txl.length?txl.map(t=>`<tr class="${t.sn && !(S.all||S.data).orders.some(o=>o.sn===t.sn) ? 'tx-orphan' : ''}"><td class="num">${dShort(t.t)}</td><td><span class="chip plain ${t.type==='in'?'tone-green':'tone-red'}">${t.type==='in'?'دخل':'خرج'}</span></td><td>${esc(t.account)}</td><td>${esc(t.cat)}</td><td>${t.sn?`<span class="mono sn">${esc(t.sn)}</span>`:'<span class="muted">—</span>'}</td><td class="num ${t.type==='in'?'amt-in':'amt-out'}">${t.type==='in'?'+':'−'}${fmt(t.amount)}</td><td>${esc(t.by)}</td><td class="muted">${esc(t.note)||'—'}</td><td><a class="icon-btn sm" href="${sheetLink(FILES.acc,'tx',t.row)}" target="_blank" rel="noopener" title="افتح السطر في الشيت" aria-label="افتح السطر في الشيت">${ic('sheet')}</a></td></tr>`).join('')
+        :`<tr><td colspan="9">${emptyBox('wallet', SYNC.state==='ok' ? 'مفيش حركات في شيت الخزنة لسه. كل دخل وخرج يتسجل هيظهر هنا.' : 'بيقرأ شيت الخزنة...')}</td></tr>`}
+      </tbody></table></div>
+    </div>
+    <div class="card"><div class="card-h"><h3>المصاريف حسب البند</h3></div><div class="card-b">${catList.length?`<div class="bars">${catList.map(([c,v],i)=>`<div class="b-row"><span>${c}</span><div class="b-track"><i style="width:${v/cmax*100}%;background:${['#EF4444','#F59E0B','#8B5CF6','#0EA5E9','#64748B'][i%5]}"></i></div><b class="num" style="text-align:end">${fmt(v)}</b></div>`).join('')}</div>`:emptyBox('wallet','مفيش مصاريف متسجلة لسه.')}</div></div>
+  </div>`;
+};
+
+/* Reports */
+function reportText(day){
+  const {orders, tx} = S.data, d = P.date(day), s = stats();
+  const newO = orders.filter(o=>sameDay(o.created,d));
+  const dayTx = tx.filter(t=>sameDay(t.t,d));
+  let t = `📊 تقرير يوم ${DAYS[d.getDay()]} ${dLabel(d)}\nALSaad October\n\n`;
+  t += `🛒 أوردرات جديدة: ${newO.length}${newO.length?`، إجمالي ${moneyTxt(newO.reduce((a,o)=>a+o.price,0))}`:''}\n`;
+  newO.forEach(o=> t += `   • ${o.model} (${o.sn})، ${o.customer}، ${fmt(o.price)}${o.deposit?`، ديبوزت ${fmt(o.deposit)}`:''}\n`);
+  t += `\n⏳ مستني يخرج: ${s.by('confirmed')}   🚚 في الشحن: ${s.by('shipping')}   ✅ اتسلم الشهر ده: ${s.by('delivered')}\n`;
+  if(can('money')){
+    const di = dayTx.filter(x=>x.type==='in').reduce((a,x)=>a+x.amount,0), dout = dayTx.filter(x=>x.type==='out');
+    t += `\n💰 الفلوس\n   دخل: ${moneyTxt(di)}\n   خرج: ${moneyTxt(dout.reduce((a,x)=>a+x.amount,0))}`;
+    dout.forEach(x=> t += `\n      − ${x.cat}: ${fmt(x.amount)}`);
+    t += `\n   عند شركة الشحن: ${moneyTxt(s.atCourier)}\n`;
+  }
+  if(me().review) t += `\n🚩 مستني مراجعة: ${s.toReview.length} أوردر`;
+  t += `\n📦 الستوك المتاح: ${s.available.length} جهاز`;
+  return t;
+}
+VIEWS.reports = () => {
+  const n = Math.max(P.elapsed,1);
+  return `
+  <div class="hero"><div><h2>التقرير اليومي</h2><p>${P.started?'ملخص أي يوم في الشهر، جاهز تنسخه وتبعته.':`التقارير هتبدأ من يوم 1 ${P.monthName}. ده شكل التقرير.`}</p></div>
+    <div class="row-flex"><select class="select" id="rday" aria-label="اليوم">${Array.from({length:n},(_,i)=>n-i).map(d=>`<option value="${d}" ${S.reportDay===d?'selected':''}>${DAYS[P.date(d).getDay()]} ${d} ${P.monthName}</option>`).join('')}</select>
+    <button class="btn btn-primary btn-sm" data-act="copyReport">${ic('copy')} نسخ التقرير</button></div></div>
+  <div class="tg"><div class="tg-head"><span class="avatar" style="font-family:Sora">A</span><div><b>ALSaad Bot</b><small>تقرير آخر اليوم</small></div></div>
+    <div class="bubble" id="reportBubble">${esc(reportText(Math.min(S.reportDay,n)))}</div></div>`;
+};
+VIEWS_AFTER.reports = () => { document.getElementById('rday').onchange = e => { S.reportDay = +e.target.value; document.getElementById('reportBubble').textContent = reportText(S.reportDay); }; };
+
+/* Users & sections */
+VIEWS.users = () => {
+  const yes = `<span class="yes">${ic('check')}</span>`, no = `<span class="no">—</span>`;
+  if(!S.usersList && !VIEWS.users.busy){ VIEWS.users.busy = true;
+    api('users').then(r=>{ S.usersList = r.users; }).catch(e=>{ S.usersErr = e.message; }).finally(()=>{ VIEWS.users.busy = false; if(S.view==='users') renderView(); }); }
+  const list = S.usersList;
+  const usersLink = `${FILES.acc.url}#gid=600`;
+  return `
+  <div class="hero"><div><h2>المستخدمين والصلاحيات</h2><p>كل واحد بيدخل بيوزر وباسورد، ويشوف الأقسام اللي متعلّمة قدامه بس. الصلاحيات بتتظبط من صفحة "المستخدمين" في ملف الحسابات.</p></div>
+    <a class="btn btn-primary btn-sm" href="${usersLink}" target="_blank" rel="noopener">${ic('sheet')} افتح صفحة المستخدمين</a></div>
+  <div class="card"><div class="table-wrap">${!list ? emptyBox('users', S.usersErr ? esc(S.usersErr) : 'بيجيب المستخدمين...') : `<table class="sheet perm"><thead><tr><th>المستخدم</th><th>اسم الدخول</th>${SECTIONS.map(s=>`<th title="${s.d}">${s.t}</th>`).join('')}<th>سعر الشرا والربح</th><th>مراجعة الفلوس</th><th>آخر دخول</th></tr></thead><tbody>
+  ${list.map(u=>`<tr class="${u.active?'':'muted'}"><td><div class="row-flex" style="flex-wrap:nowrap">${av(u)}<div><div class="cell-main">${nm(u.name)}</div><div class="cell-sub">${esc(u.title)}${u.active?'':' (موقوف)'}</div></div></div></td><td class="mono">${esc(u.u)}</td>
+    ${SECTIONS.map(s=>`<td>${u.sections.includes(s.id)?yes:no}</td>`).join('')}<td>${u.cost?yes:no}</td><td>${u.review?yes:no}</td><td class="num muted">${esc(u.lastLogin)||'—'}</td></tr>`).join('')}
+  </tbody></table>`}</div></div>
+  <div class="grid g-1-1 mt">
+    <div class="card"><div class="card-h"><h3>الأقسام</h3></div><div class="card-b"><div class="secs">${SECTIONS.map(s=>`<div class="sec"><span class="sec-ic">${ic(s.i)}</span><div><b>${s.t}</b><small>${s.d}</small></div></div>`).join('')}</div></div></div>
+    <div class="card"><div class="card-h"><h3>إزاي تضيف حد</h3></div><div class="card-b">
+      <ol class="qs">
+        <li>افتح <a href="${usersLink}" target="_blank" rel="noopener"><b>صفحة المستخدمين</b></a> في ملف الحسابات.</li>
+        <li>اكتب في سطر جديد: اليوزر (بالإنجليزي صغير، مثلاً karim)، والاسم، والمسمى.</li>
+        <li>علّم على الأقسام اللي يشوفها، وعلى "نشط".</li>
+        <li>اكتب باسورد مؤقت في خانة "باسورد جديد" (الصفرا). السيستم هيشفّره ويمسحه، والشخص هيختار باسورد بتاعه أول ما يدخل.</li>
+      </ol>
+      <p class="muted" style="margin-top:12px;font-size:13px">عشان توقف حد فورًا: شيل علامة "نشط". ولو حد نسي الباسورد: اكتبله باسورد مؤقت جديد في نفس الخانة.</p>
+    </div></div>
+  </div>`;
+};
+
+/* Connections: the two files, and whether each page was read */
+VIEWS.connections = () => {
+  const st = SYNC.state;
+  const head = st==='ok' ? `<div class="note" style="background:var(--green-soft);color:var(--green);margin-bottom:16px">${ic('check')}<div><b>السيستم متربط بالشيتات.</b> آخر قراءة الساعة ${hhmm(SYNC.at)}. بيقرأ تاني لوحده كل 3 دقايق.</div></div>`
+    : st==='loading'||st==='idle' ? `<div class="note" style="margin-bottom:16px">${ic('refresh','spin')}<div>بيقرأ الشيتات دلوقتي...</div></div>`
+    : `<div class="note warn" style="margin-bottom:16px">${ic('alert')}<div><b>${st==='partial'?'في صفحات مقريتش.':'الشيتات مش واصلة.'}</b> ${esc(SYNC.msg)}</div></div>`;
+  const tabState = tb => { const p = SYNC.parts[tb.k];
+    if(!p) return `<span class="chip plain" style="background:var(--surface-2);color:var(--muted)">${st==='loading'?'بيقرأ...':'مقريتش'}</span>`;
+    return p.ok ? `<span class="chip s-delivered">${ic('check')} اتقرت، ${fmt(p.rows)} سطر</span>` : `<span class="chip s-cancelled" title="${esc(p.msg)}">مقريتش</span>`; };
+  const fileCard = f => { const allowed = !f.need || f.need(me());
+    return `<div class="card mt conn">
+    <div class="conn-top"><div class="conn-ic">${ic('sheet')}</div><div><h4>${esc(f.title)}</h4><div class="cell-sub">${esc(f.d)}</div></div>
+      <a class="btn btn-ghost btn-sm" style="margin-inline-start:auto" href="${f.url}" target="_blank" rel="noopener">${ic('sheet')} افتح الملف</a></div>
+    ${allowed ? `<div class="table-wrap" style="margin-top:14px"><table class="sheet"><thead><tr><th>الصفحة</th><th>الحالة</th><th>ملاحظة</th></tr></thead><tbody>
+      ${f.tabs.map(tb=>{ const p = SYNC.parts[tb.k]; return `<tr><td><b>${esc(tb.t)}</b></td><td>${tabState(tb)}</td><td class="muted" style="white-space:normal">${p && !p.ok ? esc(p.msg) : '—'}</td></tr>`; }).join('')}
+    </tbody></table></div>` : `<div class="muted" style="margin-top:12px;font-size:13px">${ic('lock')} ${esc(f.lockMsg||'')}</div>`}
+  </div>`; };
+  return `
+  <div class="hero"><div><h2>ربط جوجل شيت</h2><p>السيستم بيقرأ من 3 ملفات بس: الملف المشترك اللي الفريق بيسجل فيه (الأوردرات والستوك)، وملف الحسابات الخاص (أسعار الشراء والخزنة)، وملف المرتبات. أي شيت تاني مش داخل السيستم.</p></div>
+    <button class="btn btn-primary btn-sm" data-act="sync">${ic('refresh', st==='loading'?'spin':'')} اقرأ الشيتات دلوقتي</button></div>
+  ${head}
+  ${Object.values(FILES).map(fileCard).join('')}
+  <div class="card mt"><div class="card-h"><h3>قواعد عشان الداتا تفضل مظبوطة</h3></div><div class="card-b"><ol class="rules">${SHEET_RULES.map(r=>`<li>${r}</li>`).join('')}</ol></div></div>
+  <div class="card mt"><div class="card-h"><h3>إزاي السيستم بيوصل للشيتات</h3></div><div class="card-b"><p class="muted" style="font-size:13.5px;line-height:1.9">
+    السيستم بيكلّم سيرفر صغير على Google Apps Script اسمه "ALSaad October API"، شغال بحساب جوجل بتاع محمد. السيرفر هو اللي بيقرأ الشيتات وبيتأكد من اليوزر والباسورد، وكل يوزر بيوصله بس الملفات اللي صلاحياته بتسمح بيها. يعني اللي بيستخدم السيستم مش محتاج يكون متشارك معاه الشيتات.
+    السيستم مش بيكتب في الشيتات غير حاجة واحدة: علامة "اتراجع" في الأوردرات، لما حد يدوس "الفلوس تمام".</p></div></div>`;
+};
+
+/* Payroll (from the payroll file) */
+const payCursor = () => S.month || defaultMonth();
+VIEWS.payroll = () => {
+  const c = payCursor(), pr = payrollFor(c.y, c.m), part = SYNC.parts.emp;
+  const minM = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), 1), atMin = new Date(c.y, c.m, 1) <= minM;
+  const sel = S.payEmp, emp = sel!=null ? S.data.emp.find(e=>e.code===sel) : null;
+  const log = pr.adj.filter(a=>sel==null || a.code===sel).sort((a,b)=>b.t-a.t);
+  const noData = !S.data.emp.length;
+  return `
+  <div class="hero"><div><h2>المرتبات</h2><p>من ملف المرتبات: المرتب الثابت ناقص الخصومات وزايد البونص لكل موظف في الشهر. الخصم أو البونص بيتحسب في الشهر اللي تاريخه فيه.</p></div>
+    <a class="btn btn-ghost btn-sm" href="${FILES.pay.url}" target="_blank" rel="noopener">${ic('sheet')} افتح ملف المرتبات</a></div>
+  ${emp?`<div class="card"><div class="toolbar"><button class="btn btn-ghost btn-sm" data-pemp="${emp.code}">${ic('x')} إلغاء فلتر ${esc(emp.name)}</button></div></div>`:''}
+  ${part && !part.ok ? `<div class="note warn mt">${ic('alert')}<div>${esc(part.msg)}</div></div>` : ''}
+  ${kpiStrip([
+    {label:'عدد الموظفين', val:fmt(S.data.emp.length), icon:'users', tone:'blue'},
+    {label:'إجمالي المرتبات الثابتة', val:money(pr.salary), icon:'cash', tone:'sky'},
+    {label:'الخصومات', val:money(pr.ded), icon:'down', tone:'red'},
+    {label:'البونص', val:money(pr.bonus), icon:'up', tone:'violet'},
+    {label:'الصافي المطلوب صرفه', val:money(pr.net), icon:'wallet', tone:'green'},
+  ])}
+  ${pr.orphan.length?`<div class="note warn mt">${ic('alert')}<div>في ${pr.orphan.length} خصم/بونص الشهر ده بكود مش موجود في صفحة الموظفين، ومش متحسبين في حد.</div></div>`:''}
+  <div class="card mt"><div class="card-h"><h3>كشف ${MONTHS[c.m]}</h3><span class="hint">دوس على موظف تشوف خصوماته والبونص بتاعه</span></div>
+    ${noData ? emptyBox('users', part && part.ok ? 'لسه مفيش موظفين في صفحة الموظفين.' : 'بيقرأ ملف المرتبات...') : `<div class="table-wrap"><table class="sheet"><thead><tr><th>الكود</th><th>الاسم</th><th>الوظيفة</th><th>المرتب الثابت</th><th>الخصومات</th><th>البونص</th><th>الصافي</th></tr></thead><tbody>
+      ${pr.rows.map(r=>`<tr class="clickable ${sel===r.code?'sel':''}" data-pemp="${r.code}"><td class="num"><b>${r.code}</b></td><td><b>${esc(r.name)}</b></td><td>${esc(r.job)}</td><td class="num">${fmt(r.salary)}</td>
+        <td class="num ${r.ded?'amt-out':'muted'}">${r.ded?'−'+fmt(r.ded):'—'}</td><td class="num ${r.bonus?'amt-in':'muted'}">${r.bonus?'+'+fmt(r.bonus):'—'}</td><td class="num"><b class="${r.net<0?'c-red':'c-green'}">${fmt(r.net)}</b></td></tr>`).join('')}
+      <tr class="tot-row"><td></td><td><b>الإجمالي</b></td><td></td><td class="num"><b>${fmt(pr.salary)}</b></td><td class="num amt-out"><b>${pr.ded?'−'+fmt(pr.ded):'—'}</b></td><td class="num amt-in"><b>${pr.bonus?'+'+fmt(pr.bonus):'—'}</b></td><td class="num"><b>${fmt(pr.net)}</b></td></tr>
+    </tbody></table></div>`}
+  </div>
+  <div class="card mt"><div class="card-h"><h3>${emp?`خصومات وبونص ${esc(emp.name)}`:'كل الخصومات والبونص'} في ${MONTHS[c.m]}</h3><span class="hint">${log.length} حركة</span></div>
+    ${log.length ? `<div class="table-wrap"><table class="sheet"><thead><tr><th>التاريخ</th><th>الاسم</th><th>النوع</th><th>المبلغ</th><th>السبب</th></tr></thead><tbody>
+      ${log.map(a=>`<tr><td class="num">${dShort(a.t)}</td><td>${esc(a.name || (S.data.emp.find(e=>e.code===a.code)||{}).name || ('كود '+a.code))}</td>
+        <td><span class="chip plain ${a.type==='ded'?'tone-red':'tone-violet'}">${a.type==='ded'?'خصم':'بونص'}</span></td>
+        <td class="num ${a.type==='ded'?'amt-out':'amt-in'}">${a.type==='ded'?'−':'+'}${fmt(a.amount)}</td><td class="muted">${esc(a.reason)||'—'}</td></tr>`).join('')}
+    </tbody></table></div>` : emptyBox('check', 'مفيش خصومات ولا بونص في الشهر ده.')}
+  </div>`;
+};
+
+/* ---------- Drawer / alerts panel / toast ---------- */
+function openDrawer(html){
+  const d = document.getElementById('drawer'); d.innerHTML = html; d.classList.add('show'); d.setAttribute('aria-hidden','false');
+  document.getElementById('overlay').classList.add('show');
+}
+function closeDrawer(){
+  const d = document.getElementById('drawer'); if(!d) return; d.classList.remove('show'); d.setAttribute('aria-hidden','true');
+  document.getElementById('overlay').classList.remove('show');
+}
+function openAlerts(){
+  openDrawer(`<div class="drawer-h"><h3>التنبيهات</h3><button class="icon-btn" data-act="close" aria-label="إغلاق">${ic('x')}</button></div>
+    <div class="drawer-b">${alertList(alerts())}</div>`);
+}
+function toast(msg, bad){
+  const t = document.createElement('div'); t.className='toast'+(bad?' bad':''); t.innerHTML = `${ic(bad?'alert':'check')}<span>${esc(msg)}</span>`;
+  document.getElementById('toasts').appendChild(t); setTimeout(()=>t.remove(), bad?5200:2800);
+}
+
+/* ---------- Events (delegated) ---------- */
+document.addEventListener('click', e => {
+  if(e.target.closest('#cmd')) return;
+  const el = e.target.closest('[data-act],[data-order],[data-go],[data-st],[data-sst],[data-count],[data-ship],[data-sug],[data-alert],[data-review],[data-unreview],[data-acc],[data-mtype],[data-pm],[data-pemp]');
+  if(!el) return;
+  const d = el.dataset;
+  if(d.sug) return aiSend(d.sug);
+  if(d.review) return setReviewed(d.review, true);
+  if(d.unreview) return setReviewed(d.unreview, false);
+  if(d.alert){ const a = alerts()[+d.alert]; if(a){ closeDrawer(); go(a.go, a.apply); } return; }
+  if(d.order) return openOrder(d.order);
+  if(d.go) return go(d.go, ()=>{ if(d.shipf) S.shipFilter = d.shipf; if(d.go==='orders') S.orderFilter = {q:'', status:'all', day:null, review:false}; });
+  if(d.st){ S.orderFilter.review = d.st==='review'; if(d.st!=='review') S.orderFilter.status = d.st; return renderView(); }
+  if(d.sst){ S.stockFilter.status = d.sst; return renderView(); }
+  if(d.ship){ S.shipFilter = d.ship; return renderView(); }
+  if(d.acc){ S.moneyFilter.account = S.moneyFilter.account===d.acc ? 'all' : d.acc; return renderView(); }
+  if(d.mtype){ S.moneyFilter.type = d.mtype; return renderView(); }
+  if(d.count){ S.counted.has(d.count)?S.counted.delete(d.count):S.counted.add(d.count); return renderView(); }
+  if(d.pm) return setMonth(+d.pm);
+  if(d.pemp){ S.payEmp = S.payEmp===+d.pemp ? null : +d.pemp; return renderView(); }
+  switch(d.act){
+    case 'logout': return logout();
+    case 'sync': return reloadData(false, true);
+    case 'password': return renderChangePassword('', false);
+    case 'clearDay': S.orderFilter.day = null; return renderView();
+    case 'cmd': return openCmd();
+    case 'ai': return openAI();
+    case 'aiClose': return closeAI();
+    case 'aiClear': if(AI.busy) return; AI.msgs = []; return renderAI();
+    case 'aiStop': AI.ctrl?.abort(); return;
+    case 'menu': return document.getElementById('side').classList.toggle('open');
+    case 'theme': document.body.classList.add('theming'); S.theme = S.theme==='dark'?'light':'dark'; document.documentElement.dataset.theme=S.theme; store.set('theme',S.theme); setTimeout(()=>document.body.classList.remove('theming'),400); return renderShell();
+    case 'alerts': return openAlerts();
+    case 'close': return closeDrawer();
+    case 'flow': S.showFlow = !S.showFlow; document.getElementById('flowHelp').hidden = !S.showFlow; return;
+    case 'countReset': S.counted.clear(); return renderView();
+    case 'copyReport': navigator.clipboard?.writeText(reportText(S.reportDay)).then(()=>toast('التقرير اتنسخ')).catch(()=>toast('مقدرتش أنسخ، حدّد النص وانسخه يدوي')); return;
+  }
+});
+document.getElementById('overlay').onclick = () => { closeDrawer(); document.getElementById('side')?.classList.remove('open'); };
+document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeCmd(); closeDrawer(); closeAI(); } });
+window.addEventListener('hashchange', () => { if(!S.user) return; const h = location.hash.slice(1); if(SEC(h) && h!==S.view){ S.view = h; renderView(); } });
+
+/* ---------- AI assistant (Claude via the page's `sample` capability) ---------- */
+let SAMPLE = null;
+const AI = {msgs:[], busy:false, ctrl:null};
+if(window.claude && typeof window.claude.use === 'function'){
+  window.claude.use('sample').then(fn=>{ SAMPLE = fn; document.body.classList.toggle('ai-on', !!fn); }).catch(()=>{});
+}
+function aiOrderRow(o){
+  const m = moneyOf(o);
+  const row = {sn:o.sn, date:isoDay(o.created), model:o.model, cpu:o.cpu, ram:o.ram, hard:o.hard, price:o.price, deposit:m.deposit, deposit_method:o.depositMethod, rest:m.rest, rest_method:o.remMethod,
+    money_status:m.label, courier_cod:!!o.cod, sales_rep:o.rep, customer:o.customer, phone:o.phone, delivery:o.delivery, address:o.address, status:STATUS[o.status].short,
+    days_since_order:daysSince(o.created), money_reviewed:!!o.reviewed};
+  if(me().cost){ row.cost = o.cost; row.profit = ['cancelled','returned'].includes(o.status) ? 0 : o.price - (o.cost||0); }
+  return row;
+}
+function aiTools(){
+  const u = me(), t = [
+    {name:'get_overview', description:'ملخص أرقام الشهر: المبيعات، الأوردرات بكل حالة، أوردرات النهارده، الستوك، والمستني مراجعة.' + (can('money')?' وأرصدة الحسابات واللي عند شركة الشحن.':''),
+      inputSchema:{type:'object', properties:{}},
+      execute(){ const s = stats(); const o = {today:isoDay(S.data.today), period_start:isoDay(P.start), month_sales:s.revenue, orders_by_status:Object.fromEntries(Object.keys(STATUS).map(k=>[STATUS[k].short, s.by(k)])),
+        today_orders:s.todayOrders.length, waiting_money_review:s.toReview.length, stock_available:s.available.length, stock_formula:{opening:s.opening, incoming:s.incoming, out:s.out, returns:s.returns, expected:s.expected}};
+        if(u.cost) o.month_profit = s.profit; if(can('money')){ o.accounts = s.accounts; o.at_courier = s.atCourier; o.pending_rest_with_customers = s.pendingRest; } return o; }},
+    {name:'find_orders', description:'يدوّر في الأوردرات. كل الفلاتر اختيارية. status: مستني يخرج، في الشحن، اتسلم، مرتجع، ملغي. التواريخ YYYY-MM-DD. query بيدوّر في السيريال والعميل والتليفون والموديل والسيلز. unreviewed=true للأوردرات اللي فلوسها لسه متراجعتش.',
+      inputSchema:{type:'object', properties:{query:{type:'string'}, status:{type:'string'}, from:{type:'string'}, to:{type:'string'}, sales_rep:{type:'string'}, unreviewed:{type:'boolean'}}},
+      execute({query='', status='', from='', to='', sales_rep='', unreviewed=false}={}){
+        const q = query.trim().toLowerCase(), f = dayFromIso(from), tt = dayFromIso(to);
+        const st = Object.keys(STATUS).find(k=>STATUS[k].short===status.trim() || k===status.trim());
+        const list = S.data.orders.filter(o=>(!q || [o.sn,o.customer,o.phone,o.model,o.rep].join(' ').toLowerCase().includes(q))
+          && (!st || o.status===st) && (!f || o.created >= f) && (!tt || o.created < new Date(+tt + 864e5)) && (!sales_rep || (o.rep||'').includes(sales_rep.trim())) && (!unreviewed || !o.reviewed))
+          .sort((a,b)=>b.created-a.created);
+        return {count:list.length, total_price:list.reduce((a,o)=>a+o.price,0), orders:list.slice(0,40).map(aiOrderRow)};
+      }},
+    {name:'get_stock', description:'الأجهزة في الستوك. status اختياري: متاح، محجوز لأوردر، في الشحن، اتباع. query بيدوّر في السيريال والموديل.',
+      inputSchema:{type:'object', properties:{status:{type:'string'}, query:{type:'string'}}},
+      execute({status='', query=''}={}){
+        const st = Object.keys(DEV_STATUS).find(k=>DEV_STATUS[k]===status.trim() || k===status.trim()), q = query.trim().toLowerCase();
+        const list = S.data.devices.filter(d=>(!st || d.status===st) && (!q || (d.sn+' '+d.model+' '+d.cpu).toLowerCase().includes(q)));
+        return {count:list.length, devices:list.map(d=>{ const x = {sn:d.sn, model:d.model, cpu:d.cpu, ram:d.ram, hard:d.hard, gpu:d.gpu, screen:d.screen, condition:d.condition, charger:d.adapter, source:d.source, added:isoDay(d.added), status:DEV_STATUS[d.status], returned:d.returned}; if(u.cost) x.cost = d.cost; return x; })};
+      }},
+    {name:'get_sales_performance', description:'أداء كل سيلز الشهر ده: عدد الأجهزة، المبيعات، المتسلم، والملغي أو المرتجع.', inputSchema:{type:'object', properties:{}},
+      execute(){ return {reps:repStats().map(r=>{ const x = {...r}; if(!u.cost) delete x.profit; return x; })}; }},
+    {name:'get_alerts', description:'التنبيهات الحالية وفحص الداتا: أوردرات مستنية مراجعة، متأخر في الشحن، فلوس عند شركة الشحن، فروق بين الأوردرات والخزنة، وأخطاء في الشيتات.', inputSchema:{type:'object', properties:{}},
+      execute(){ return {alerts:alerts().map(a=>({title:a.t, count:a.n, items:a.list.slice(0,10).map(x=>x.sn? {sn:x.sn, model:x.model||null, customer:x.customer||null} : x)}))}; }},
+    {name:'get_daily_report', description:`نص التقرير اليومي ليوم في ${P.monthName} ${P.y}. day من 1 لـ ${Math.max(P.elapsed,1)}.`,
+      inputSchema:{type:'object', properties:{day:{type:'number'}}, required:['day']},
+      execute({day}){ const d = Math.min(Math.max(P.elapsed,1), Math.max(1, Math.round(+day||1))); return {day:d, report:reportText(d)}; }},
+  ];
+  if(can('payroll')) t.push({name:'get_payroll', description:'كشف المرتبات لشهر: المرتب الثابت والخصومات والبونص والصافي لكل موظف، وكل حركات الخصم والبونص. month بصيغة YYYY-MM (اختياري، الافتراضي الشهر الحالي).',
+    inputSchema:{type:'object', properties:{month:{type:'string'}}},
+    execute({month=''}={}){
+      const m = /^(\d{4})-(\d{2})$/.exec(month.trim()); const c = m ? {y:+m[1], m:+m[2]-1} : payCursor(); const pr = payrollFor(c.y, c.m);
+      return {month:`${c.y}-${String(c.m+1).padStart(2,'0')}`, total_fixed:pr.salary, total_deductions:pr.ded, total_bonus:pr.bonus, total_net:pr.net,
+        employees:pr.rows.map(r=>({code:r.code, name:r.name, job:r.job, fixed:r.salary, deductions:r.ded, bonus:r.bonus, net:r.net})),
+        entries:pr.adj.map(a=>({date:isoDay(a.t), code:a.code, name:a.name, type:a.type==='ded'?'خصم':'بونص', amount:a.amount, reason:a.reason}))};
+    }});
+  if(can('money')) t.push({name:'get_treasury', description:'حركات شيت الخزنة. from و to اختياريين YYYY-MM-DD، type: in أو out، account: '+ACCOUNTS.join(' / '),
+    inputSchema:{type:'object', properties:{from:{type:'string'}, to:{type:'string'}, type:{type:'string'}, account:{type:'string'}}},
+    execute({from='', to='', type='', account=''}={}){
+      const f = dayFromIso(from), tt = dayFromIso(to);
+      const list = S.data.tx.filter(x=>(!f || x.t>=f) && (!tt || x.t < new Date(+tt+864e5)) && (!type || x.type===type) && (!account || x.account===account));
+      return {accounts:stats().accounts, total_in:list.filter(x=>x.type==='in').reduce((a,x)=>a+x.amount,0), total_out:list.filter(x=>x.type==='out').reduce((a,x)=>a+x.amount,0),
+        transactions:list.map(x=>({date:isoDay(x.t), type:x.type==='in'?'دخل':'خرج', account:x.account, category:x.cat, amount:x.amount, sn:x.sn||null, by:x.by, note:x.note}))};
+    }});
+  return t;
+}
+function aiSystem(){
+  const u = me();
+  return `انت "ALSaad AI"، مساعد جوه نظام إدارة الشغل بتاع ALSaad October (فرع السعد أكتوبر، تجارة لابتوبات مستوردة).
+المستخدم اللي بيكلمك: ${u.name} (${u.title}). الأقسام المسموحة له: ${u.sections.map(s=>SEC(s).t).join('، ')}.${u.cost?'':' مش مسموح له يشوف سعر الشرا ولا الربح.'}${can('money')?'':' مش مسموح له يشوف الفلوس والخزنة.'}
+البيانات بتيجي من ملفات جوجل شيت بس: الملف المشترك (الأوردرات والستوك، ومربوطين بالسيريال S/N)${(u.cost||can('money'))?' وملف الحسابات (أسعار الشراء والخزنة)':''}${can('payroll')?' وملف المرتبات (الموظفين والخصومات والبونص)':''}. ${SYNC.state==='ok'?`آخر قراءة للشيتات الساعة ${hhmm(SYNC.at)}.`:'الشيتات مش مقرية دلوقتي، فلو الأرقام فاضية قول كده.'}
+الفلوس: سعر البيع = الديبوزت + الباقي. الباقي بيتدفع كاش أو إنستاباي أو فودافون كاش أو فيزا (عادي أو تقسيط أو مشتريات)، أو بيتحصل عن طريق شركة الشحن. فلوس شركة الشحن = اللي اتحصل من العملاء ناقص "توريد شركة الشحن" في الخزنة. كل أوردر بيفضل بعلامة حمرا لحد ما حد يراجع فلوسه ويعلّم عليه.
+النهارده ${DAYS[S.data.today.getDay()]} ${isoDay(S.data.today)}. السيستم بيحسب من ${isoDay(P.start)}. لو مفيش بيانات لسه، قول إن الشيت لسه فاضي أو الشهر لسه مبدأش.
+
+قواعد:
+- رد بالعامية المصرية، مختصر ومباشر.
+- أي رقم لازم ييجي من الأدوات، ومتألفش أرقام أبداً.
+- لما تذكر جهاز اذكر الموديل والسيريال.
+- تقدر تساعد في كتابة رسايل للعملاء، أو تحليل الأرقام واقتراح خطوات.
+- التنسيق: سطور قصيرة، و"- " للنقط، و**كده** للتأكيد بس.`;
+}
+function mdLite(t){
+  const lines = esc(t).split('\n'); let out = '', inList = false;
+  for(const ln of lines){
+    const b = ln.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+    if(/^\s*[-•]\s+/.test(ln)){ if(!inList){ out += '<ul>'; inList = true; } out += `<li>${b.replace(/^\s*[-•]\s+/,'')}</li>`; }
+    else { if(inList){ out += '</ul>'; inList = false; } out += b ? `${b}<br>` : '<br>'; }
+  }
+  if(inList) out += '</ul>';
+  return out.replace(/(<br>)+$/,'');
+}
+const AI_SUGS = ['إيه اللي محتاج أراجعه النهارده؟','فين فلوس شركة الشحن اللي متأخرة؟','مين أكتر سيلز باع الشهر ده؟','في أي غلط في الشيتات؟','اكتبلي رسالة للعميل إن جهازه خرج للشحن'];
+function renderAI(){
+  const el = document.getElementById('ai'); if(!el || !S.user) return;
+  const body = AI.msgs.length ? AI.msgs.map(m=>`<div class="msg ${m.role}${m.err?' err':''}">${m.role==='assistant' && !m.content ? '<span class="thinking"><i></i><i></i><i></i> بيفكر...</span>' : m.role==='assistant' ? mdLite(m.content) : esc(m.content).replace(/\n/g,'<br>')}</div>`).join('')
+    : `<div class="ai-welcome"><div class="big">${ic('spark')}</div><h4>أهلاً يا ${nm(me().first)}، أساعدك في إيه؟</h4><p>اسألني عن الأوردرات، الفلوس، الشحن، الستوك، أو اطلب مني أكتب رسالة.</p>
+      <div class="sugs">${AI_SUGS.map(q=>`<button data-sug="${esc(q)}">${ic('spark')}<span>${esc(q)}</span></button>`).join('')}</div></div>`;
+  el.innerHTML = `
+    <div class="ai-h"><span class="avatar">${ic('spark')}</span><div><b>ALSaad AI</b><small>بيرد من بيانات السيستم حسب صلاحياتك</small></div>
+      <div class="acts"><button class="icon-btn" data-act="aiClear" title="محادثة جديدة" aria-label="محادثة جديدة">${ic('trash')}</button><button class="icon-btn" data-act="aiClose" aria-label="إغلاق">${ic('x')}</button></div></div>
+    <div class="ai-b" id="aiMsgs">${body}</div>
+    <form class="ai-f" id="aiForm"><textarea id="aiInput" rows="1" placeholder="اكتب سؤالك هنا..." ${AI.busy?'disabled':''}></textarea>
+      ${AI.busy ? `<button type="button" class="btn btn-ghost" data-act="aiStop" title="إيقاف" aria-label="إيقاف">${ic('stop')}</button>` : `<button type="submit" class="btn btn-primary" aria-label="إرسال">${ic('send')}</button>`}</form>
+    <div class="ai-note">المساعد ممكن يغلط، راجع الأرقام المهمة من الجداول</div>`;
+  const box = document.getElementById('aiMsgs'); box.scrollTop = box.scrollHeight;
+  const ta = document.getElementById('aiInput');
+  ta.oninput = () => { ta.style.height='auto'; ta.style.height = Math.min(ta.scrollHeight,140)+'px'; };
+  ta.onkeydown = e => { if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); aiSend(ta.value); } };
+  document.getElementById('aiForm').onsubmit = e => { e.preventDefault(); aiSend(ta.value); };
+  if(!AI.busy) setTimeout(()=>ta.focus(), 50);
+}
+function openAI(){ const el = document.getElementById('ai'); renderAI(); el.classList.add('show'); el.setAttribute('aria-hidden','false'); document.body.classList.add('ai-open'); }
+function closeAI(){ const el = document.getElementById('ai'); if(!el) return; el.classList.remove('show'); el.setAttribute('aria-hidden','true'); document.body.classList.remove('ai-open'); }
+async function aiSend(text){
+  text = (text||'').trim(); if(!text || AI.busy || !SAMPLE) return;
+  AI.msgs.push({role:'user', content:text});
+  const reply = {role:'assistant', content:''}; AI.msgs.push(reply);
+  AI.busy = true; AI.ctrl = new AbortController(); renderAI();
+  const history = AI.msgs.filter(m=>m!==reply && !m.err && m.content);
+  const input = history.map((m,i)=>({role:m.role, content: i===0 ? `${aiSystem()}\n\n---\nسؤال المستخدم:\n${m.content}` : m.content}));
+  try{
+    const res = await SAMPLE(input, {tools:aiTools(), signal:AI.ctrl.signal, cache:false,
+      onText:({text})=>{ reply.content = text; const box = document.getElementById('aiMsgs'); const last = box?.lastElementChild; if(last){ last.innerHTML = text ? mdLite(text) : '<span class="thinking"><i></i><i></i><i></i> بيفكر...</span>'; box.scrollTop = box.scrollHeight; } }});
+    reply.content = res?.text || reply.content || 'مقدرتش أطلع رد، جرّب تاني.';
+  }catch(e){
+    if(e?.name === 'AbortError'){ reply.content = (reply.content || '') + (reply.content ? '\n\n' : '') + '(اتوقف)'; }
+    else { reply.err = true; reply.content = e?.code==='not_granted' ? 'لازم توافق على استخدام المساعد عشان يشتغل.' : e?.code==='rate_limited' ? 'في ضغط دلوقتي، استنى دقيقة وجرّب تاني.' : (e?.text || 'حصلت مشكلة ومقدرتش أرد، جرّب تاني.'); }
+  }finally{ AI.busy = false; AI.ctrl = null; renderAI(); }
+}
+
+/* ---------- Command palette (Ctrl+K) ---------- */
+const CMD = {q:'', i:0, items:[]};
+function cmdResults(q){
+  q = q.trim().toLowerCase(); const out = [];
+  const pages = SECTIONS.filter(s=>can(s.id) && (!q || s.t.includes(q))).map(s=>({group:'الأقسام', icon:s.i, t:s.t, sub:s.d, run:()=>go(s.id)}));
+  if(q){
+    S.data.orders.filter(o=>[o.sn,o.customer,o.phone,o.model].join(' ').toLowerCase().includes(q)).slice(0,6)
+      .forEach(o=>out.push({group:'الأوردرات', icon:'orders', t:o.model, sub:`${o.customer}، ${dLabel(o.created)}`, end:`<span class="mono sn">${esc(o.sn)}</span>`, chip:chip(o.status), run:()=>openOrder(o.id)}));
+    if(can('stock')) S.data.devices.filter(d=>d.status==='available' && (d.sn+' '+d.model).toLowerCase().includes(q)).slice(0,4)
+      .forEach(d=>out.push({group:'أجهزة متاحة', icon:'box', t:d.model, sub:`${d.cpu}، ${d.ram}، ${d.hard}`, end:`<span class="mono sn">${esc(d.sn)}</span>`, run:()=>go('stock', ()=>{ S.stockFilter = {q:d.sn, status:'all'}; })}));
+  }
+  const acts = [
+    {group:'أوامر', icon:S.theme==='dark'?'sun':'moon', t:S.theme==='dark'?'الوضع النهاري':'الوضع الليلي', run:()=>document.querySelector('[data-act="theme"]')?.click()},
+    ...(SAMPLE?[{group:'أوامر', icon:'spark', t:'اسأل المساعد الذكي', run:()=>openAI()}]:[]),
+    {group:'أوامر', icon:'logout', t:'تسجيل خروج', run:()=>logout()},
+  ].filter(a=>!q || a.t.includes(q));
+  return [...out, ...pages, ...acts];
+}
+function renderCmd(){
+  const el = document.getElementById('cmd'); CMD.items = cmdResults(CMD.q); CMD.i = Math.min(CMD.i, Math.max(0,CMD.items.length-1));
+  let last = '', html = '';
+  CMD.items.forEach((it,i)=>{ if(it.group!==last){ html += `<div class="cmd-group">${it.group}</div>`; last = it.group; }
+    html += `<button class="cmd-item ${i===CMD.i?'on':''}" data-ci="${i}"><span class="ci">${ic(it.icon)}</span><span><b>${esc(it.t)}</b>${it.sub?`<small>${esc(it.sub)}</small>`:''}</span><span class="end row-flex">${it.chip||''}${it.end||''}</span></button>`; });
+  el.querySelector('.cmd-list').innerHTML = html || emptyBox('search', `مفيش نتايج لـ «${esc(CMD.q)}». جرّب السيريال أو اسم العميل أو رقم التليفون.`);
+  el.querySelector('.cmd-item.on')?.scrollIntoView({block:'nearest'});
+}
+function openCmd(){
+  if(!S.user) return;
+  const el = document.getElementById('cmd'); CMD.q = ''; CMD.i = 0;
+  el.innerHTML = `<div class="cmd-box"><div class="cmd-in">${ic('search')}<input id="cmdIn" placeholder="دوّر بالسيريال، اسم العميل، التليفون، أو اسم القسم" autocomplete="off"><kbd>Esc</kbd></div><div class="cmd-list"></div>
+    <div class="cmd-foot"><span><kbd>↑</kbd> <kbd>↓</kbd> تنقّل</span><span><kbd>Enter</kbd> فتح</span></div></div>`;
+  el.classList.add('show'); renderCmd();
+  const inp = document.getElementById('cmdIn'); inp.focus();
+  inp.oninput = () => { CMD.q = inp.value; CMD.i = 0; renderCmd(); };
+  inp.onkeydown = e => {
+    if(e.key==='ArrowDown'){ e.preventDefault(); CMD.i = Math.min(CMD.i+1, CMD.items.length-1); renderCmd(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); CMD.i = Math.max(CMD.i-1, 0); renderCmd(); }
+    else if(e.key==='Enter'){ e.preventDefault(); runCmd(CMD.i); }
+  };
+  el.onclick = e => { const b = e.target.closest('[data-ci]'); if(b) return runCmd(+b.dataset.ci); if(e.target===el) closeCmd(); };
+}
+function runCmd(i){ const it = CMD.items[i]; if(!it) return; closeCmd(); it.run(); }
+function closeCmd(){ document.getElementById('cmd')?.classList.remove('show'); }
+document.addEventListener('keydown', e => {
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); document.getElementById('cmd').classList.contains('show') ? closeCmd() : openCmd(); }
+  else if(e.key==='/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||'') && S.user){ e.preventDefault(); openCmd(); }
+});
+
+/* ---------- Boot ---------- */
+async function boot(){
+  S.all = DataSource.fromCache() || DataSource.empty(); S.month = defaultMonth(); applyMonth();
+  S.reportDay = Math.max(P.elapsed,1);
+  document.body.classList.add('logged');
+  const h = location.hash.slice(1);
+  S.view = SEC(h) && can(h) ? h : 'dashboard';
+  SYNC.state = 'loading'; if(S.all.cachedAt) SYNC.at = new Date(S.all.cachedAt);
+  renderShell();
+  await reloadData();
+  if(!boot.timer) boot.timer = setInterval(()=>{ if(S.user && !document.hidden && SYNC.state!=='loading') reloadData(true); }, 180000);
+}
+/* Read both files again and redraw. quiet = background refresh (no loading chip) */
+async function reloadData(quiet, fresh){
+  if(reloadData.busy) return; reloadData.busy = true;
+  if(!quiet){ SYNC.state = 'loading'; refreshSyncChip(); }
+  try{
+    const prev = S.all;
+    const next = await DataSource.load(prev, fresh);
+    next.today = new Date();
+    S.all = next; applyMonth();
+    if(S.reportDay > Math.max(P.elapsed,1)) S.reportDay = Math.max(P.elapsed,1);
+    if(S.user){ const drawerOpen = document.getElementById('drawer')?.classList.contains('show'); if(!drawerOpen) renderShell(); else refreshSyncChip(); }
+  } finally { reloadData.busy = false; }
+}
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && S.user && SYNC.at && Date.now()-SYNC.at > 120000) reloadData(true); });
+/* ---------- Opening splash: the welcome line types itself, then the app opens ---------- */
+function splash(){
+  return new Promise(done => {
+    const el = document.getElementById('splash'); if(!el){ done(); return; }
+    const line = 'Everything October. From A to Z.';
+    const out = el.querySelector('.sp-text'), reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let i = 0, finished = false, timer;
+    const finish = () => { if(finished) return; finished = true; clearInterval(timer); out.textContent = line;
+      el.classList.add('sp-out'); setTimeout(()=>{ el.remove(); done(); }, reduce ? 0 : 650); };
+    el.addEventListener('click', finish); document.addEventListener('keydown', finish, {once:true});
+    if(reduce){ out.textContent = line; setTimeout(finish, 900); return; }
+    setTimeout(()=>{
+      timer = setInterval(()=>{ i++; out.textContent = line.slice(0, i);
+        if(i >= line.length){ clearInterval(timer); el.classList.add('sp-done'); setTimeout(finish, 1100); } }, 75);
+    }, 450);
+  });
+}
+(async function init(){
+  const u = store.get(K.token) && store.get(K.user);
+  await splash();
+  if(u && !u.mustChange){ S.user = u; boot(); } else { store.del(K.token); renderLogin(); }
+})();
+if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+</script>
+</body>
+</html>

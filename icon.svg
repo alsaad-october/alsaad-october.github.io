@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="112" fill="#161A21"/>
+<defs><radialGradient id="g" cx="50%" cy="38%" r="60%"><stop offset="0" stop-color="#1C4FD6" stop-opacity=".45"/><stop offset="1" stop-color="#1C4FD6" stop-opacity="0"/></radialGradient></defs>
+<rect width="512" height="512" rx="112" fill="url(#g)"/>
+<g transform="translate(256 262) scale(8.2) translate(-21.6 -100.3)" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="miter" stroke-linecap="butt">
+<path d="M6.2,111.6 L25.3,90.4 Q26.6,89 28.6,89 L34,89 L34,111.6"/>
+</g>
+<text x="256" y="418" text-anchor="middle" font-family="Sora,Arial,sans-serif" font-weight="600" font-size="34" letter-spacing="9" fill="#5C8DFF">OCTOBER</text>
+</svg>
