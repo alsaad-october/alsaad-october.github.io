@@ -610,6 +610,12 @@ body{overflow-x:clip}
   .table-wrap{-webkit-overflow-scrolling:touch}
   .drawer{width:100%!important;max-width:100%!important}
 }
+
+/* update bar */
+#updBar{position:fixed;inset-inline:0;bottom:18px;margin:auto;width:max-content;max-width:calc(100vw - 24px);z-index:200;display:flex;align-items:center;gap:12px;
+  background:#161A21;color:#fff;border:1px solid #2f3a4d;border-radius:14px;padding:10px 12px 10px 16px;box-shadow:0 18px 40px -16px rgba(0,0,0,.5);font-size:14px}
+#updBar button{background:#1C4FD6;color:#fff;border:0;border-radius:10px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+#updBar button:focus-visible{outline:2px solid #8fb0ff;outline-offset:2px}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#161A21">
@@ -2028,6 +2034,26 @@ function splash(){
   if(u && !u.mustChange){ S.user = u; boot(); } else { store.del(K.token); renderLogin(); }
 })();
 if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* ---------- update check: when a newer version is published, offer a one-tap reload ---------- */
+const APP_VERSION = '20261125023322';
+async function checkForUpdate(){
+  if(location.protocol!=='https:' || document.getElementById('updBar')) return;
+  try{
+    const r = await fetch('version.json?t=' + Date.now(), {cache:'no-store'}); if(!r.ok) return;
+    const {v} = await r.json(); if(!v || v===APP_VERSION) return;
+    const bar = document.createElement('div'); bar.id = 'updBar'; bar.setAttribute('role','status');
+    bar.innerHTML = '<span>في تحديث جديد للسيستم.</span><button type="button">حدّث دلوقتي</button>';
+    bar.querySelector('button').onclick = async () => {
+      bar.querySelector('button').textContent = 'بيحدّث...';
+      try{ const regs = await navigator.serviceWorker?.getRegistrations?.() || []; await Promise.all(regs.map(g=>g.update())); const ks = await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); }catch(e){}
+      location.reload();
+    };
+    document.body.appendChild(bar);
+  }catch(e){}
+}
+setTimeout(checkForUpdate, 4000);
+setInterval(checkForUpdate, 5*60*1000);
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkForUpdate(); });
 
 </script>
 </body>
