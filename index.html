@@ -766,7 +766,7 @@ const REM_METHODS = ['كاش','إنستاباي','فودافون كاش','فيز
 const DELIVERY = ['شحن','استلام من اكتوبر','استلام من مدينة نصر','استلام من وسط البلد','استلام من الفيوم'];
 const isPickup = o => (o.delivery||'').startsWith('استلام');
 const SHIP_LATE_DAYS = 4;
-const TX_IN  = ['رصيد أول الشهر','ديبوزت','باقي أوردر','توريد شركة الشحن','أخرى'];
+const TX_IN  = ['رصيد أول الشهر','ديبوزت','أوردر','باقي أوردر','توريد شركة الشحن','أخرى'];
 const TX_OUT = ['مصاريف شحن','مرتجع لعميل','مصاريف تشغيل','مرتبات','سحب للإدارة','أخرى'];
 
 /* ---------- The Google Sheets files (the only data the system reads) ----------
@@ -910,7 +910,7 @@ function normalize(raw, base){
       model:dev ? dev.model : 'جهاز مش في الستوك', cpu:dev?dev.cpu:'', ram:dev?dev.ram:'', hard:dev?dev.hard:'', cost:dev?dev.cost:0, noStock:!dev};
   });
   d.tx = sheetRows(raw.tx).filter(r=>toNum(r.v('المبلغ'))>0).map(r=>({row:r.row, t:toDate(r.v('التاريخ')) || new Date(d.today),
-    type:r.v('النوع')==='خرج' ? 'out' : 'in', cat:r.v('البند'), amount:toNum(r.v('المبلغ')), account:r.v('الحساب'), sn:r.v('S/N'), note:r.v('التفاصيل'), by:r.v('المسؤول')}));
+    type:r.v('النوع')==='خرج' ? 'out' : 'in', cat:String(r.v('البند')||'').trim(), amount:toNum(r.v('المبلغ')), account:r.v('الحساب'), sn:r.v('S/N'), note:r.v('التفاصيل'), by:r.v('المسؤول')}));
   d.emp = sheetRows(raw.emp, 4).filter(r=>r.v('الكود') && r.v('الاسم')).map(r=>({code:toNum(r.v('الكود')), name:r.v('الاسم'), job:r.v('الوظيفة'), salary:toNum(r.v('المرتب الثابت'))}));
   d.adj = sheetRows(raw.adj, 4).filter(r=>toNum(r.v('المبلغ'))>0 && toDate(r.v('التاريخ'))).map(r=>({t:toDate(r.v('التاريخ')), code:toNum(r.v('الكود')), name:r.v('الاسم'),
     type:r.v('النوع')==='بونص' ? 'bonus' : 'ded', amount:toNum(r.v('المبلغ')), reason:r.v('السبب')}));
@@ -975,7 +975,7 @@ function moneyOf(o){
   }
   // what should be in the treasury for this S/N (deposit + remainder collected directly, not via courier)
   const expectedDirect = (o.status==='cancelled'||o.status==='returned') ? null : deposit + (done && !cod ? rest : 0);
-  const inTreasury = (S.all||S.data).tx.filter(t=>t.type==='in' && t.sn===o.sn && (t.cat==='ديبوزت'||t.cat==='باقي أوردر')).reduce((a,t)=>a+t.amount,0);
+  const inTreasury = (S.all||S.data).tx.filter(t=>t.type==='in' && t.sn===o.sn && (t.cat==='ديبوزت'||t.cat==='باقي أوردر'||t.cat==='أوردر')).reduce((a,t)=>a+t.amount,0);
   const mismatch = expectedDirect!=null && inTreasury !== expectedDirect;
   if(mismatch && (state==='collected'||state==='paid')){
     const diff = expectedDirect - inTreasury; tone = 'red';
@@ -1587,7 +1587,7 @@ VIEWS.money = () => {
   <div class="hero"><div><h2>الفلوس والخزنة</h2><p>كل جنيه في مكانه: في أنهي حساب، ولسه عند مين.</p></div><button class="btn btn-ghost btn-sm" data-act="flow">${ic('info')} إزاي الفلوس بتمشي؟</button></div>
   <div class="flow-help" id="flowHelp" ${S.showFlow?'':'hidden'}>
     <div class="fh-step"><b>1. الديبوزت أو المبلغ كله</b><p>بيتكتب في الأوردر (الديبوزت وطريقته)، وبيتسجل في شيت الخزنة كـ"ديبوزت" على الحساب اللي دخل فيه، بنفس السيريال.</p></div>
-    <div class="fh-step"><b>2. الباقي</b><p>لو العميل دفعه بنفسه (كاش، إنستاباي، فيزا...): بيتسجل في الخزنة "باقي أوردر" بنفس السيريال. لو "تحصيل شركة الشحن" متعلّم: شركة الشحن بتحصله ويفضل عندها.</p></div>
+    <div class="fh-step"><b>2. الباقي</b><p>لو العميل دفعه بنفسه (كاش، إنستاباي، فيزا...): بيتسجل في الخزنة "أوردر" بنفس السيريال. لو "تحصيل شركة الشحن" متعلّم: شركة الشحن بتحصله ويفضل عندها.</p></div>
     <div class="fh-step"><b>3. توريد شركة الشحن</b><p>لما شركة الشحن تحوّل الفلوس: بتتسجل في تاب الخزنة "توريد شركة الشحن" بالمبلغ اللي وصل. السيستم بيطرحه من اللي عندها لوحده.</p></div>
     <div class="fh-step"><b>4. المراجعة</b><p>بعد ما تتأكد إن كل ده وصل، افتح الأوردر ودوس "الفلوس تمام". العلامة الحمرا بتختفي.</p></div>
   </div>
