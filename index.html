@@ -922,7 +922,7 @@ function normalize(raw, base){
       model:dev ? dev.model : 'جهاز مش في الستوك', cpu:dev?dev.cpu:'', ram:dev?dev.ram:'', hard:dev?dev.hard:'', cost:dev?dev.cost:0, noStock:!dev};
   });
   // accessories ("هدايا الجهاز"): catalog, movements, and private unit costs
-  const accCost = new Map(sheetRows(raw.accPrices).filter(r=>r.v('الصنف')).map(r=>[r.v('الصنف'), toNum(r.v('سعر الشراء'))]));
+  const accCost = new Map(sheetRows(raw.accPrices).filter(r=>r.v('الصنف') && toNum(r.v('سعر الشراء'))>0).map(r=>[r.v('الصنف'), toNum(r.v('سعر الشراء'))]));
   d.accItems = sheetRows(raw.accItems).filter(r=>r.v('الصنف')).map(r=>({row:r.row, name:r.v('الصنف'), type:r.v('النوع') || 'أخرى', notes:r.v('ملاحظات'),
     cost:accCost.get(r.v('الصنف'))||0, noPrice:!accCost.has(r.v('الصنف'))}));
   const itemCost = new Map(d.accItems.map(a=>[a.name, a.cost]));
@@ -2088,7 +2088,7 @@ function splash(){
 })();
 if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
 /* ---------- update check: when a newer version is published, offer a one-tap reload ---------- */
-const APP_VERSION = '20261128133132';
+const APP_VERSION = '20261128133401';
 async function checkForUpdate(){
   if(location.protocol!=='https:' || document.getElementById('updBar')) return;
   try{
