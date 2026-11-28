@@ -616,6 +616,9 @@ body{overflow-x:clip}
   background:#161A21;color:#fff;border:1px solid #2f3a4d;border-radius:14px;padding:10px 12px 10px 16px;box-shadow:0 18px 40px -16px rgba(0,0,0,.5);font-size:14px}
 #updBar button{background:#1C4FD6;color:#fff;border:0;border-radius:10px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
 #updBar button:focus-visible{outline:2px solid #8fb0ff;outline-offset:2px}
+
+.card-f{padding:12px 18px;border-top:1px solid var(--border)}
+.c-red{color:var(--red)}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#161A21">
@@ -781,16 +784,19 @@ const FILES = {
   ops:{key:'ops', id:'12SvYaRop5AkkFXBA2RyRmy4wKlcvFDsiM7PFyb5PCT8', title:'ALSaad October | الاوردارت',
        url:'https://docs.google.com/spreadsheets/d/12SvYaRop5AkkFXBA2RyRmy4wKlcvFDsiM7PFyb5PCT8/edit',
        d:'الملف المشترك: الأوردرات والستوك من غير أسعار شراء ولا فلوس. الفريق (زي كريم) بيسجل فيه.',
-       gids:{orders:0, stock:100},
+       gids:{orders:0, stock:100, accItems:110, accMoves:111},
        tabs:[{k:'orders', t:'الأوردرات', range:"'الأوردرات'!A1:R20000"},
-             {k:'stock',  t:'الستوك',    range:"'الستوك'!A1:N20000"}]},
+             {k:'stock',  t:'الستوك',    range:"'الستوك'!A1:N20000"},
+             {k:'accItems', t:'الإكسسوارات',      range:"'الإكسسوارات'!A1:F1000"},
+             {k:'accMoves', t:'حركة الإكسسوارات', range:"'حركة الإكسسوارات'!A1:H20000"}]},
   acc:{key:'acc', id:'1OUaCd6dOTcisKgnFf0slvKtANtrKEKlwxU5ju9eXsCA', title:'ALSaad October | الحسابات',
        url:'https://docs.google.com/spreadsheets/d/1OUaCd6dOTcisKgnFf0slvKtANtrKEKlwxU5ju9eXsCA/edit',
        d:'ملف خاص: أسعار الشراء والربح والخزنة. بيتقري بس لليوزر اللي معاه صلاحية الفلوس أو سعر الشرا.',
        need:u=>u.cost || u.sections.includes('money'), lockMsg:'الملف ده بيتقري بس لليوزر اللي معاه صلاحية الفلوس أو سعر الشرا.',
-       gids:{prices:0, tx:1398649563},
+       gids:{prices:0, tx:1398649563, accPrices:610},
        tabs:[{k:'prices', t:'أسعار الأجهزة', range:"'أسعار الأجهزة'!A1:H20000"},
-             {k:'tx',     t:'الخزنة',        range:"'الخزنة'!A1:I20000"}]},
+             {k:'tx',     t:'الخزنة',        range:"'الخزنة'!A1:I20000"},
+             {k:'accPrices', t:'أسعار الإكسسوارات', range:"'أسعار الإكسسوارات'!A1:C1000"}]},
   pay:{key:'pay', id:'159KAuOCk02CwzGMQUD4Z2lILcftpyvL1y6LnXWcQ7ZQ', title:'ALSaad October | المرتبات',
        url:'https://docs.google.com/spreadsheets/d/159KAuOCk02CwzGMQUD4Z2lILcftpyvL1y6LnXWcQ7ZQ/edit',
        d:'ملف خاص: الموظفين والخصومات والبونص.', need:u=>u.sections.includes('payroll'), lockMsg:'الملف ده بيتقري بس لليوزر اللي معاه صلاحية المرتبات.',
@@ -860,7 +866,7 @@ async function gsRead(mcp, file, range, retried=false){
   }
 }
 const DataSource = {
-  empty(){ return {devices:[], orders:[], tx:[], emp:[], adj:[], today:new Date(), monthStart:monthStartFor(new Date()), raw:{}}; },
+  empty(){ return {devices:[], orders:[], tx:[], emp:[], adj:[], accItems:[], accMoves:[], today:new Date(), monthStart:monthStartFor(new Date()), raw:{}}; },
   /* last data read on this device, shown instantly while the server answers */
   fromCache(){
     const c = store.get(K.cache + (me()||{}).u); if(!c || !c.tabs) return null;
@@ -915,6 +921,15 @@ function normalize(raw, base){
       shipCost:toNum(r.v('مصاريف شحن علينا')), cod:isTrue(r.v('تحصيل شركة الشحن')), notes:r.v('ملاحظات'), reviewed:isTrue(r.v('اتراجع (')), ...parseStamp(r.v('اتراجع بواسطة')),
       model:dev ? dev.model : 'جهاز مش في الستوك', cpu:dev?dev.cpu:'', ram:dev?dev.ram:'', hard:dev?dev.hard:'', cost:dev?dev.cost:0, noStock:!dev};
   });
+  // accessories ("هدايا الجهاز"): catalog, movements, and private unit costs
+  const accCost = new Map(sheetRows(raw.accPrices).filter(r=>r.v('الصنف')).map(r=>[r.v('الصنف'), toNum(r.v('سعر الشراء'))]));
+  d.accItems = sheetRows(raw.accItems).filter(r=>r.v('الصنف')).map(r=>({row:r.row, name:r.v('الصنف'), type:r.v('النوع') || 'أخرى', notes:r.v('ملاحظات'),
+    cost:accCost.get(r.v('الصنف'))||0, noPrice:!accCost.has(r.v('الصنف'))}));
+  const itemCost = new Map(d.accItems.map(a=>[a.name, a.cost]));
+  d.accMoves = sheetRows(raw.accMoves).filter(r=>r.v('الصنف') && toNum(r.v('الكمية'))>0).map(r=>{ const k = r.v('الحركة');
+    return {row:r.row, t:toDate(r.v('التاريخ')) || new Date(d.today), kind: k==='دخول' ? 'in' : k==='مرتجع' ? 'return' : 'out', item:r.v('الصنف'), qty:toNum(r.v('الكمية')),
+      sn:r.v('S/N'), gift:r.v('هدية ولا بفلوس')!=='بفلوس', notes:r.v('ملاحظات'), unit:itemCost.get(r.v('الصنف'))||0}; });
+  d.orders.forEach(o=>{ o.acc = d.accMoves.filter(m=>m.kind==='out' && m.sn && m.sn===o.sn); o.accCost = o.acc.reduce((s,m)=>s+m.qty*m.unit,0); });
   d.tx = sheetRows(raw.tx).filter(r=>toNum(r.v('المبلغ'))>0).map(r=>({row:r.row, t:toDate(r.v('التاريخ')) || new Date(d.today),
     type:r.v('النوع')==='خرج' ? 'out' : 'in', cat:String(r.v('البند')||'').trim(), amount:toNum(r.v('المبلغ')), account:r.v('الحساب'), sn:r.v('S/N'), note:r.v('التفاصيل'), by:r.v('المسؤول')}));
   d.emp = sheetRows(raw.emp, 4).filter(r=>r.v('الكود') && r.v('الاسم')).map(r=>({code:toNum(r.v('الكود')), name:r.v('الاسم'), job:r.v('الوظيفة'), salary:toNum(r.v('المرتب الثابت'))}));
@@ -998,7 +1013,7 @@ function stats(){
   const todayOrders = orders.filter(o=>sameDay(o.created,today));
   const revenue = active.reduce((s,o)=>s+o.price,0);
   const shipOnUs = active.reduce((s,o)=>s+(o.shipCost||0),0);   // مصاريف شحن علينا
-  const profit = active.reduce((s,o)=>s+(o.price-(o.cost||0)),0) - shipOnUs;
+  const profit = active.reduce((s,o)=>s+(o.price-(o.cost||0)-(o.accCost||0)),0) - shipOnUs;
   const by = st => orders.filter(o=>o.status===st).length;
   const txUpto = S.data.txUpto || tx, ordersUpto = S.data.ordersUpto || orders;
   const accounts = Object.fromEntries(ACCOUNTS.map(a=>[a, txUpto.filter(t=>t.account===a).reduce((s,t)=>s+(t.type==='in'?t.amount:-t.amount),0)]));
@@ -1083,6 +1098,13 @@ function alerts(){
     add('red','flag','أوردرات من شهور قبل كده فلوسها لسه متراجعتش', old, 'orders', ()=>{ S.month = monthOf(old[0].created); applyMonth(); S.orderFilter = {q:'', status:'all', day:null, review:true}; }); }
   if(me().cost && SYNC.parts.prices && SYNC.parts.prices.ok) add('amber','box','أجهزة في الستوك لسه ملهاش سعر شراء في ملف الحسابات', devices.filter(d=>d.noPrice), 'stock');
   if(can('money')) add('amber','info','حركة خزنة على سيريال مش في الأوردرات', tx.filter(t=>t.sn && !(S.all||S.data).orders.some(o=>o.sn===t.sn)), 'money');
+  // accessories
+  const acc = accStock();
+  add('red','alert','إكسسوار رصيده بالسالب (طلع أكتر من اللي دخل)', acc.filter(a=>a.left<0), 'stock');
+  add('amber','box','إكسسوارات قربت تخلص (باقي قطعتين أو أقل)', acc.filter(a=>a.left>=0 && a.left<=2 && a.inQ>0), 'stock');
+  add('amber','info','إكسسوار طلع على سيريال مش في الأوردرات', (S.all||S.data).accMoves.filter(m=>m.kind==='out' && m.sn && !(S.all||S.data).orders.some(o=>o.sn===m.sn)), 'stock');
+  add('amber','info','إكسسوار طلع من غير سيريال جهاز', (S.all||S.data).accMoves.filter(m=>m.kind==='out' && !m.sn), 'stock');
+  if(me().cost && SYNC.parts.accPrices && SYNC.parts.accPrices.ok) add('amber','box','إكسسوارات لسه ملهاش سعر شراء في ملف الحسابات', S.data.accItems.filter(a=>a.noPrice), 'stock');
   // sheet capacity: formulas run to row 20,000. Warn admins from 80% so there is time to archive.
   if(S.all && (can('users') || can('connections'))){
     const CAP = 19999, parts = [['الأوردرات', S.all.orders.length], ['الستوك', S.all.devices.length], ['الخزنة', (S.all.tx||[]).length]];
@@ -1273,7 +1295,7 @@ function ordersTable(list, {compact=false, ship=false}={}){
     model:['الموديل',o=>`<b>${esc(o.model)}</b>`],
     cpu:['البروسيسور',o=>esc(o.cpu)], ram:['الرام',o=>esc(o.ram)], hard:['الهارد',o=>`<span dir="ltr">${esc(o.hard)}</span>`],
     price:['سعر البيع',o=>`<b class="num">${fmt(o.price)}</b>`],
-    profit:['الربح',o=>dead(o)?'<span class="muted">—</span>':`<span class="num trend-up">${fmt(o.price-(o.cost||0)-(o.shipCost||0))}</span>`],
+    profit:['الربح',o=>dead(o)?'<span class="muted">—</span>':`<span class="num trend-up">${fmt(o.price-(o.cost||0)-(o.shipCost||0)-(o.accCost||0))}</span>`],
     deposit:['الديبوزت',o=>o.deposit?`<span class="num">${fmt(o.deposit)}</span> <span class="cell-sub">${esc(o.depositMethod||'')}</span>`:'<span class="muted">—</span>'],
     rest:['الباقي',o=>{ const m=moneyOf(o); return m.rest?`<span class="num">${fmt(m.rest)}</span> <span class="cell-sub">${o.cod?'تحصيل شركة الشحن':esc(o.remMethod||'')}</span>`:'<span class="muted">—</span>'; }],
     mstate:['حالة الفلوس',o=>MSTATE_CHIP(moneyOf(o))],
@@ -1387,7 +1409,7 @@ function repStats(){
   const map = {};
   S.data.orders.forEach(o=>{ const k = o.rep || 'من غير اسم'; const r = map[k] = map[k] || {rep:k, n:0, revenue:0, delivered:0, back:0, profit:0};
     if(o.status==='cancelled' || o.status==='returned'){ r.back++; return; }
-    r.n++; r.revenue += o.price; r.profit += o.price-(o.cost||0); if(o.status==='delivered') r.delivered++; });
+    r.n++; r.revenue += o.price; r.profit += o.price-(o.cost||0)-(o.accCost||0); if(o.status==='delivered') r.delivered++; });
   return Object.values(map).sort((a,b)=>b.revenue-a.revenue);
 }
 function topReps(n){
@@ -1462,12 +1484,15 @@ function openOrder(id){
         <div><span>الديبوزت ${o.deposit?`<small>(${esc(o.depositMethod||'')})</small>`:''}</span><b class="num">${o.deposit?fmt(m.deposit):'—'}</b></div>
         <div class="tot"><span>الباقي ${m.rest?`<small>(${o.cod?'تحصيل شركة الشحن':esc(o.remMethod||'')})</small>`:''}</span><b class="num">${fmt(m.rest)}</b></div>
         ${o.shipCost?`<div><span>مصاريف شحن علينا</span><b class="num">${fmt(o.shipCost)}</b></div>`:''}
-        ${u.cost?`<div><span>سعر الشرا</span><b class="num">${dev?fmt(dev.cost):'—'}</b></div><div><span>الربح</span><b class="num trend-up">${fmt(o.price-(o.cost||0)-(o.shipCost||0))}</b></div>`:''}
+        ${u.cost?`<div><span>سعر الشرا</span><b class="num">${dev?fmt(dev.cost):'—'}</b></div>${o.accCost?`<div><span>تكلفة الإكسسوارات</span><b class="num">${fmt(o.accCost)}</b></div>`:''}<div><span>الربح</span><b class="num trend-up">${fmt(o.price-(o.cost||0)-(o.shipCost||0)-(o.accCost||0))}</b></div>`:''}
       </div>
       <div class="row-flex" style="margin-top:12px">${MSTATE_CHIP(m)}</div>
       ${can('money')?`<div class="sec-title">في شيت الخزنة بنفس السيريال</div>
       ${txs.length?`<div class="mini-tx">${txs.map(t=>`<div><span>${dLabel(t.t)}، ${esc(t.cat)} <small>(${esc(t.account)})</small></span><b class="num ${t.type==='in'?'amt-in':'amt-out'}">${t.type==='in'?'+':'−'}${fmt(t.amount)}</b></div>`).join('')}</div>`:`<div class="muted" style="font-size:13px">مفيش حركات متسجلة بالسيريال ده.</div>`}
       ${m.mismatch?`<div class="note warn" style="margin-top:10px">${ic('alert')}<div>المفروض يكون متسجل في الخزنة ${moneyTxt(m.expectedDirect)} (ديبوزت + باقي اتحصل مباشرة)، والمتسجل ${moneyTxt(m.inTreasury)}.</div></div>`:''}`:''}
+
+      ${o.acc && o.acc.length?`<div class="sec-title">طلع معاه</div>
+      <div class="mini-tx">${o.acc.map(a=>`<div><span>${esc(a.item)} <small>(${a.gift?'هدية':'بفلوس'}${a.qty>1?`، ${a.qty} قطع`:''})</small></span><b class="num">${u.cost?(a.unit?fmt(a.qty*a.unit):'<span class="muted">من غير سعر</span>'):'×'+a.qty}</b></div>`).join('')}</div>`:''}
 
       <div class="sec-title">الجهاز والعميل</div>
       <dl class="kv"><dt>المواصفات</dt><dd>${esc(o.cpu)}، ${esc(o.ram)}، <span dir="ltr">${esc(o.hard)}</span></dd><dt>العميل</dt><dd>${esc(o.customer)}</dd><dt>التليفون</dt><dd class="num">${esc(o.phone)}</dd><dt>التسليم</dt><dd>${esc(o.delivery)}، ${esc(o.address)}</dd>${o.notes?`<dt>ملاحظات</dt><dd>${esc(o.notes)}</dd>`:''}</dl>
@@ -1529,6 +1554,33 @@ VIEWS.shipping = () => {
   </div>`;
 };
 
+/* Accessories: current balance per item (all movements), and what went out in the selected month */
+function accStock(){
+  const A = S.all || S.data, start = S.data.monthStart, end = S.data.monthEnd || new Date(8.64e15);
+  return A.accItems.map(it=>{
+    const mv = A.accMoves.filter(m=>m.item===it.name);
+    const inQ = mv.filter(m=>m.kind!=='out').reduce((s,m)=>s+m.qty,0), outQ = mv.filter(m=>m.kind==='out').reduce((s,m)=>s+m.qty,0);
+    const monthOut = mv.filter(m=>m.kind==='out' && m.t>=start && m.t<end);
+    return {...it, inQ, outQ, left:inQ-outQ, monthGift:monthOut.filter(m=>m.gift).reduce((s,m)=>s+m.qty,0), monthPaid:monthOut.filter(m=>!m.gift).reduce((s,m)=>s+m.qty,0)};
+  });
+}
+function accCard(){
+  const list = accStock(), u = me();
+  const giftCost = S.data.orders.filter(o=>!['cancelled','returned'].includes(o.status)).reduce((s,o)=>s+(o.accCost||0),0);
+  const body = !list.length ? emptyBox('box', SYNC.state==='ok' ? 'لسه مفيش أصناف في صفحة الإكسسوارات. سجّل كل صنف مرة واحدة (شنطة، ماوس، شاحن...) وبعدها سجّل الدخول والخروج في صفحة حركة الإكسسوارات.' : 'بيقرأ صفحة الإكسسوارات...')
+    : `<div class="table-wrap"><table class="sheet"><thead><tr><th>الصنف</th><th>النوع</th><th>دخل</th><th>طلع</th><th>المتبقي</th><th>هدايا ${P.monthName}</th><th>بفلوس ${P.monthName}</th>${u.cost?'<th>سعر القطعة</th><th>قيمة المتبقي</th>':''}</tr></thead><tbody>
+      ${list.sort((a,b)=>a.type.localeCompare(b.type,'ar')||a.name.localeCompare(b.name,'ar')).map(a=>`<tr>
+        <td><b>${esc(a.name)}</b>${a.notes?`<div class="cell-sub">${esc(a.notes)}</div>`:''}</td><td>${esc(a.type)}</td>
+        <td class="num">${a.inQ}</td><td class="num">${a.outQ}</td>
+        <td class="num"><b class="${a.left<0?'c-red':a.left<=2?'c-amber':''}">${a.left}</b></td>
+        <td class="num">${a.monthGift||'—'}</td><td class="num">${a.monthPaid||'—'}</td>
+        ${u.cost?`<td class="num">${a.noPrice?'<span class="muted">من غير سعر</span>':fmt(a.cost)}</td><td class="num">${a.noPrice?'—':fmt(Math.max(0,a.left)*a.cost)}</td>`:''}</tr>`).join('')}
+    </tbody></table></div>`;
+  return `<div class="card mt"><div class="card-h"><h3>الإكسسوارات وهدايا الأجهزة</h3><span class="hint">${u.cost && giftCost ? `تكلفة اللي طلع مع أجهزة ${P.monthName}: ${fmt(giftCost)} ج.م، ومخصومة من الربح` : 'من صفحة الإكسسوارات وحركة الإكسسوارات'}</span></div>
+    <div class="card-b" style="padding:0">${body}</div>
+    <div class="card-f"><a class="btn btn-ghost btn-sm" href="${sheetLink(FILES.ops,'accMoves')}" target="_blank" rel="noopener">${ic('sheet')} سجّل حركة إكسسوار</a></div></div>`;
+}
+
 /* Stock */
 VIEWS.stock = () => {
   const s = stats(), f = S.stockFilter;
@@ -1560,7 +1612,8 @@ VIEWS.stock = () => {
       <div class="tabs">${[['all','الكل'],['available','متاح'],['reserved','محجوز'],['shipping','في الشحن'],['sold','اتباع']].map(([k,t])=>`<button data-sst="${k}" class="${f.status===k?'on':''}">${t} <span>${k==='all'?S.data.devices.length:S.data.devices.filter(d=>d.status===k).length}</span></button>`).join('')}</div>
     </div>
     <div id="stockList">${stockTable()}</div>
-  </div>`;
+  </div>
+  ${accCard()}`;
 };
 function stockTable(){
   const f = S.stockFilter, q = f.q.trim().toLowerCase(), u = me();
@@ -1820,7 +1873,7 @@ function aiOrderRow(o){
   const row = {sn:o.sn, date:isoDay(o.created), model:o.model, cpu:o.cpu, ram:o.ram, hard:o.hard, price:o.price, deposit:m.deposit, deposit_method:o.depositMethod, rest:m.rest, rest_method:o.remMethod,
     money_status:m.label, courier_cod:!!o.cod, sales_rep:o.rep, customer:o.customer, phone:o.phone, delivery:o.delivery, address:o.address, status:STATUS[o.status].short,
     days_since_order:daysSince(o.created), money_reviewed:!!o.reviewed};
-  if(me().cost){ row.cost = o.cost; row.profit = ['cancelled','returned'].includes(o.status) ? 0 : o.price - (o.cost||0); }
+  if(me().cost){ row.cost = o.cost; row.profit = ['cancelled','returned'].includes(o.status) ? 0 : o.price - (o.cost||0) - (o.accCost||0); if(o.accCost) row.accessories_cost = o.accCost; }
   return row;
 }
 function aiTools(){
@@ -2035,7 +2088,7 @@ function splash(){
 })();
 if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
 /* ---------- update check: when a newer version is published, offer a one-tap reload ---------- */
-const APP_VERSION = '20261125023322';
+const APP_VERSION = '20261128133132';
 async function checkForUpdate(){
   if(location.protocol!=='https:' || document.getElementById('updBar')) return;
   try{
